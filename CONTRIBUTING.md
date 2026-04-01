@@ -27,7 +27,7 @@ Thank you for your interest in contributing! This document provides guidelines a
 ### Making changes
 
 1. Make your changes in the appropriate module (e.g. `core/` for assertion API work).
-2. Write tests for any new functionality.
+2. Write tests for any new functionality using [testBalloon](https://github.com/nicholasgasior/testballoon) in the `commonTest` source set.
 3. Run the full check suite before submitting:
 
    ```shell
@@ -35,11 +35,12 @@ Thank you for your interest in contributing! This document provides guidelines a
    ```
 
    This runs:
-   - **Tests** across all platforms (JVM, iOS)
+   - **Tests** across all supported platforms
+   - **Kover** — code coverage verification
    - **detekt** — static analysis
    - **ktlint** — code style / formatting
 
-4. Fix any issues reported by detekt or ktlint. You can run them individually:
+4. Fix any issues reported by the checks. You can run them individually:
 
    ```shell
    # Lint check
@@ -47,7 +48,23 @@ Thank you for your interest in contributing! This document provides guidelines a
 
    # Detekt analysis
    ./gradlew detekt
+
+   # Code coverage verification
+   ./gradlew koverVerify
+
+   # Generate HTML coverage report
+   ./gradlew koverHtmlReport
    ```
+
+### Testing
+
+- Tests are written using **testBalloon** as the testing framework.
+- All new functionality **must** include tests in the `commonTest` source set to ensure cross-platform coverage.
+
+### Code Coverage
+
+- Code coverage is measured by **[Kover](https://github.com/Kotlin/kotlinx-kover)** and aggregated across all modules.
+- A verification rule enforces **100% branch coverage** per class — `./gradlew check` will fail if coverage drops below this threshold.
 
 ### Code Style
 

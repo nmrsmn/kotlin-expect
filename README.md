@@ -26,13 +26,37 @@ A Kotlin Multiplatform assertion/expection library designed to provide expressiv
 ./gradlew build
 ```
 
-### Run tests
+### Run checks
 
 ```shell
 ./gradlew check
 ```
 
-This will also run code quality checks ([detekt](https://detekt.dev/) and [ktlint](https://pinterest.github.io/ktlint/)).
+This will run code quality checks ([detekt](https://detekt.dev/), [ktlint](https://pinterest.github.io/ktlint/)) and code coverage verification ([Kover](https://github.com/Kotlin/kotlinx-kover)).
+
+### Testing
+
+Tests are written using [testBalloon](https://github.com/nicholasgasior/testballoon) as the testing framework. Tests reside in the `commonTest` source set and should run across all supported platforms.
+
+```shell
+# Run all tests
+./gradlew allTests
+
+# Run JVM tests only
+./gradlew jvmTest
+```
+
+### Code Coverage
+
+Code coverage is measured by **[Kover](https://github.com/Kotlin/kotlinx-kover)** and aggregated across all modules. A verification rule enforces **100% branch coverage** per class.
+
+```shell
+# Run coverage verification
+./gradlew koverVerify
+
+# Generate an HTML coverage report
+./gradlew koverHtmlReport
+```
 
 ### Code Quality
 
@@ -42,7 +66,7 @@ The project enforces code quality through two tools, both integrated into the `c
 - **[ktlint](https://pinterest.github.io/ktlint/)** — Kotlin linter and formatter, run across all source files from the root project
 
 ```shell
-# Run all checks (tests + detekt + ktlint)
+# Run all checks (tests + detekt + ktlint + kover)
 ./gradlew check
 
 # Run only ktlint
