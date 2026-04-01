@@ -18,6 +18,8 @@ dependencyResolutionManagement {
     }
 }
 
+includeBuild("build-logic")
+
 include(
     ":core",
 )

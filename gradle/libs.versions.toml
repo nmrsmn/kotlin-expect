@@ -1,5 +1,15 @@
 [versions]
+detekt = "2.0.0-alpha.2"
+jvm-toolchain = "21"
 kotlin = "2.3.20"
+ktlint = "1.8.0"
+
+[libraries]
+detekt = { group = "dev.detekt", name = "detekt-gradle-plugin", version.ref = "detekt" }
+ktlint = { group = "com.pinterest.ktlint", name = "ktlint-cli", version.ref = "ktlint" }
 
 [plugins]
+detekt = { id = "dev.detekt", version.ref = "detekt" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
+nmarsman-detekt = { id = "dev.nmarsman.conventions.detekt" }
