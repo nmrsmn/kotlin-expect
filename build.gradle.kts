@@ -1,7 +1,8 @@
 plugins {
-    base
     alias(libs.plugins.kotlin.multiplatform) apply false
     alias(libs.plugins.nmarsman.detekt) apply false
+    alias(libs.plugins.test.balloon) apply false
+    base
 }
 
 val ktlint: Configuration by configurations.creating
