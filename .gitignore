@@ -23,5 +23,14 @@
 hs_err_pid*
 replay_pid*
 
-# Kotlin Gradle plugin data, see https://kotlinlang.org/docs/whatsnew20.html#new-directory-for-kotlin-data-in-gradle-projects
-.kotlin/
+# Ignore Gradle project-specific cache directory
+.gradle
+
+# Ignore Kotlin project-specific cache directory
+.kotlin
+
+# Ignore IDE related folders
+.idea
+
+# Ignore Gradle build output directory
+build
