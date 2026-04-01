@@ -1,6 +1,6 @@
 plugins {
+    base
     alias(libs.plugins.kotlin.multiplatform) apply false
-//    alias(libs.plugins.detekt) apply false
     alias(libs.plugins.nmarsman.detekt) apply false
 }
 
@@ -14,7 +14,7 @@ dependencies {
     }
 }
 
-tasks.register("ktlintCheck", JavaExec::class) {
+val ktlintCheck by tasks.registering(JavaExec::class) {
     group = LifecycleBasePlugin.VERIFICATION_GROUP
     description = "Check Kotlin code style"
     classpath = ktlint
@@ -24,4 +24,8 @@ tasks.register("ktlintCheck", JavaExec::class) {
         "**.kts",
         "!**/build/**",
     )
+}
+
+tasks.named("check") {
+    dependsOn(ktlintCheck)
 }
