@@ -3,12 +3,8 @@ package dev.nmarsman.expect.assertions
 import de.infix.testBalloon.framework.core.testSuite
 import dev.nmarsman.expect.api.expectThat
 import dev.nmarsman.expect.exception.AssertionFailedException
+import dev.nmarsman.expect.helper.Person
 import kotlin.test.DefaultAsserter.fail
-
-private data class Person(
-    val name: String,
-    val age: Int,
-)
 
 val AnyEqualityTest by testSuite(displayName = "Equality tests") {
     testSuite(name = "Null equality") {
