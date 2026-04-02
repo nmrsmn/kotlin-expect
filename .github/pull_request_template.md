@@ -27,11 +27,6 @@ Please confirm the following:
 - [ ] Code follows existing naming and structural conventions
 - [ ] No unrelated changes are included
 
-### Domain & architecture
-- [ ] Domain code contains no infrastructure or framework dependencies
-- [ ] Changes respect existing architectural boundaries (DDD / Hexagonal)
-- [ ] No new coupling introduced between domain and adapters
-
 ### Git & workflow
 - [ ] Branch is up to date with `main`
 - [ ] Commits are rebased (no merge commits)
@@ -44,10 +39,9 @@ Please confirm the following:
 Explain how this change is tested.
 -->
 
-- [ ] Unit tests added or updated
+- [ ] Unit tests added or updated **or** manual testing performed **or** code changes aren't testable
 - [ ] Existing tests still pass
 - [ ] Changes are testable without external infrastructure
-- [ ] Manual testing performed (if applicable)
 
 Details (optional): N/A
 
@@ -62,7 +56,6 @@ Details (optional): N/A
 
 ### Architecture
 - [ ] Architectural boundaries are respected
-- [ ] Domain model remains consistent and expressive
 - [ ] No hidden architectural decisions introduced
 
 ### Risk & impact
