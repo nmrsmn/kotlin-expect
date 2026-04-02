@@ -2,6 +2,7 @@ package dev.nmarsman.expect.assertions
 
 import de.infix.testBalloon.framework.core.testSuite
 import dev.nmarsman.expect.api.expectThat
+import dev.nmarsman.expect.exception.AssertionFailedException
 import kotlin.test.DefaultAsserter.fail
 
 val AnyAssertionTest by testSuite {
@@ -21,9 +22,8 @@ val AnyAssertionTest by testSuite {
                 expectThat("value")
                     .isA<Number>()
 
-                // Doesn't work properly until library implements AssertionFailedError from opentest4j
                 fail("Test should have thrown")
-            } catch (_: AssertionError) {
+            } catch (_: AssertionFailedException) {
                 // Test should have thrown
             }
         }
@@ -33,9 +33,8 @@ val AnyAssertionTest by testSuite {
                 expectThat(null)
                     .isA<String>()
 
-                // Doesn't work properly until library implements AssertionFailedError from opentest4j
                 fail("Test should have thrown")
-            } catch (_: AssertionError) {
+            } catch (_: AssertionFailedException) {
                 // Test should have thrown
             }
         }
@@ -52,9 +51,8 @@ val AnyAssertionTest by testSuite {
                 expectThat("value" as String?)
                     .isNull()
 
-                // Doesn't work properly until library implements AssertionFailedError from opentest4j
                 fail("Test should have thrown")
-            } catch (_: AssertionError) {
+            } catch (_: AssertionFailedException) {
                 // Test should have thrown
             }
         }

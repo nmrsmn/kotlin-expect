@@ -11,6 +11,10 @@ kotlin {
     iosSimulatorArm64()
 
     sourceSets {
+        commonMain.dependencies {
+            implementation(libs.opentest4k)
+        }
+
         commonTest.dependencies {
             implementation(libs.kotlin.test)
             implementation(libs.test.balloon.core)
