@@ -12,6 +12,14 @@ inline fun <reified T> Assertion.Builder<*>.isA(): Assertion.Builder<T> =
         }
     } as Assertion.Builder<T>
 
+fun <T> Assertion.Builder<T>.isEqualTo(expected: T?): Assertion.Builder<T> =
+    assert("is equal to $expected") {
+        when (it) {
+            expected -> pass()
+            else -> fail()
+        }
+    }
+
 @Suppress("UNCHECKED_CAST")
 fun <T> Assertion.Builder<T?>.isNull(): Assertion.Builder<Nothing> =
     assert(description = "is null") {
