@@ -1,19 +1,44 @@
 package dev.nmarsman.expect.internal
 
 import dev.nmarsman.expect.api.Assertion
-import dev.nmarsman.expect.exception.AssertionFailedException
 
 internal class AssertionResult(
-    private val description: String,
+    val description: String,
+    val expected: Any?,
 ) : Assertion {
-    override fun fail(description: String?, cause: Throwable?) {
-        val message = buildString {
-            append("Assertion failed: ${this@AssertionResult.description}")
+    sealed interface Status {
+        val symbol: String
+
+        data class Passed(
+            val description: String?,
+        ) : Status {
+            override val symbol: String
+                get() = "✓"
         }
-        throw AssertionFailedException(message, cause)
+
+        data class Failed(
+            val description: String?,
+            val cause: Throwable?,
+        ) : Status {
+            override val symbol: String
+                get() = "✗"
+        }
+    }
+
+    var status: Status = Status.Failed(null, null)
+        private set
+
+    val failed: Boolean
+        get() = status is Status.Failed
+
+    val cause: Throwable?
+        get() = (status as? Status.Failed)?.cause
+
+    override fun fail(description: String?, cause: Throwable?) {
+        status = Status.Failed(description, cause)
     }
 
     override fun pass(description: String?) {
-        // No-op: assertion passed successfully
+        status = Status.Passed(description)
     }
 }
