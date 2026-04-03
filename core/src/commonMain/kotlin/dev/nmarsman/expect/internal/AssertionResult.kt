@@ -4,6 +4,7 @@ import dev.nmarsman.expect.api.Assertion
 
 internal class AssertionResult(
     val description: String,
+    val expected: Any?,
 ) : Assertion {
     sealed interface Status {
         val symbol: String

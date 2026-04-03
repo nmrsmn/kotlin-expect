@@ -10,9 +10,10 @@ internal class AssertionBuilder<T>(
 
     override fun assert(
         description: String,
+        expected: Any?,
         assert: Assertion.(T) -> Unit,
     ): Assertion.Builder<T> = also {
-        val result = AssertionResult(description)
+        val result = AssertionResult(description, expected)
             .also { it.assert(subject) }
             .also { results.add(it) }
 
