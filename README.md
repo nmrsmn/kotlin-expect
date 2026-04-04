@@ -76,6 +76,50 @@ The project enforces code quality through two tools, both integrated into the `c
 ./gradlew detekt
 ```
 
+## Examples
+
+Use `expectThat` to start an assertion on any value, then chain one or more assertions:
+
+### Equality
+
+```kotlin
+expectThat(42)
+    .isEqualTo(42)
+
+expectThat("hello")
+    .isEqualTo("hello")
+
+expectThat(listOf(1, 2, 3))
+    .isEqualTo(listOf(1, 2, 3))
+```
+
+### Type checking
+
+```kotlin
+expectThat("hello")
+    .isA<String>()
+
+expectThat(1L)
+    .isA<Number>()
+```
+
+### Null checking
+
+```kotlin
+expectThat(null)
+    .isNull()
+```
+
+### Chaining assertions
+
+Assertions return the builder, so you can chain multiple checks on the same subject:
+
+```kotlin
+expectThat("hello")
+    .isA<String>()
+    .isEqualTo("hello")
+```
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to contribute.
