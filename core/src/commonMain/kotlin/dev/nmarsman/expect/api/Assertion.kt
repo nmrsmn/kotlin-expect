@@ -17,6 +17,19 @@ interface Assertion {
     fun fail(description: String? = null, cause: Throwable? = null)
 
     /**
+     * Mark the result of the assertion as failed, including an actual value.
+     *
+     * When the [description] contains `{}`, it will be replaced with the formatted representation of [actual].
+     *
+     * @param description A description of the failure. If it contains `{}`, the placeholder will be replaced with
+     *      the formatted representation of [actual].
+     * @param actual The actual value that was encountered. Will be formatted and used to
+     *      replace `{}` in [description], if present.
+     * @param cause An optional Throwable that caused the failure.
+     */
+    fun fail(description: String, actual: Any?, cause: Throwable? = null)
+
+    /**
      * Mark the result of the assertion as successful.
      *
      * @param description An optional description of the success. Can provide context about why the assertion passed.
@@ -64,5 +77,33 @@ interface Assertion {
             expected: Any?,
             assert: Assertion.(T) -> Unit,
         ): Builder<T>
+
+        /**
+         * Sets a custom description for the subject of this assertion.
+         * When set, this description is used in failure messages instead of the formatted subject value.
+         *
+         * @param description The description to use for the subject.
+         * @return This builder for chaining.
+         */
+        fun describedAs(description: String): Builder<T>
+
+        /**
+         * Sets a custom description for the subject of this assertion using a lambda.
+         * When set, this description is used in failure messages instead of the formatted subject value.
+         *
+         * @param descriptor A lambda that returns the description to use for the subject.
+         * @return This builder for chaining.
+         */
+        fun describedAs(descriptor: () -> String): Builder<T> =
+            describedAs(descriptor())
+
+        /**
+         * Sets a custom description for the subject of this assertion using a formatted value.
+         * The value is formatted using the same formatting rules as assertion descriptions and expected values.
+         *
+         * @param value The value to format and use as the subject description.
+         * @return This builder for chaining.
+         */
+        fun describedAs(value: Any): Builder<T>
     }
 }

@@ -18,6 +18,7 @@ internal class AssertionResult(
 
         data class Failed(
             val description: String?,
+            val actual: Any?,
             val cause: Throwable?,
         ) : Status {
             override val symbol: String
@@ -25,7 +26,7 @@ internal class AssertionResult(
         }
     }
 
-    var status: Status = Status.Failed(null, null)
+    var status: Status = Status.Failed(null, null, null)
         private set
 
     val failed: Boolean
@@ -35,7 +36,11 @@ internal class AssertionResult(
         get() = (status as? Status.Failed)?.cause
 
     override fun fail(description: String?, cause: Throwable?) {
-        status = Status.Failed(description, cause)
+        status = Status.Failed(description, null, cause)
+    }
+
+    override fun fail(description: String, actual: Any?, cause: Throwable?) {
+        status = Status.Failed(description, actual, cause)
     }
 
     override fun pass(description: String?) {

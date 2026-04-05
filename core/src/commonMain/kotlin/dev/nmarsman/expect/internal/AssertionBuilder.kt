@@ -4,8 +4,11 @@ import dev.nmarsman.expect.api.Assertion
 import dev.nmarsman.expect.exception.AssertionFailedException
 
 internal class AssertionBuilder<T>(
-    override val subject: T,
+    private var context: AssertionSubject<T>,
 ) : Assertion.Builder<T> {
+    override val subject: T
+        get() = context.subject
+
     private val results = mutableListOf<AssertionResult>()
 
     override fun assert(
@@ -18,8 +21,21 @@ internal class AssertionBuilder<T>(
             .also { results.add(it) }
 
         if (result.failed) {
-            val message = AssertionFailedMessageFormatter.format(subject, results)
+            val message = AssertionFailedMessageFormatter.format(context, results)
             throw AssertionFailedException(message, result.cause)
         }
+    }
+
+    override fun describedAs(description: String): Assertion.Builder<T> = also {
+        context = context.copy(
+            description = description,
+        )
+    }
+
+    override fun describedAs(value: Any): Assertion.Builder<T> = also {
+        context = context.copy(
+            description = AssertionFailedMessageFormatter.formatValue(value)
+                .toString(),
+        )
     }
 }
