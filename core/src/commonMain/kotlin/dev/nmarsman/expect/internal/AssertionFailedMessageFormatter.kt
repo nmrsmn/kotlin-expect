@@ -5,13 +5,14 @@ import kotlin.reflect.KClass
 
 internal object AssertionFailedMessageFormatter {
     private const val INDENT = "   "
+    private const val CONTINUATION_INDENT = "     "
     private const val FORMATTED_VALUE_MAX_LENGTH = 40
 
     fun <T> format(
-        subject: T,
+        context: AssertionSubject<T>,
         results: List<AssertionResult>,
     ): String = buildString {
-        appendLine("▼ Expect that ${formatValue(subject)}:")
+        appendLine("▼ Expect that ${context.description ?: formatValue(context.subject)}:")
         results.forEach { result ->
             appendLine(formatResult(result))
         }
@@ -32,11 +33,19 @@ internal object AssertionFailedMessageFormatter {
 
             when (val status = result.status) {
                 is Status.Failed ->
-                    status.description?.let {
+                    status.description?.let { description ->
+                        val formatted = when (description.contains("{}")) {
+                            true -> description.replace(
+                                oldValue = "{}",
+                                newValue = formatValue(status.actual).toString(),
+                            )
+
+                            false -> description
+                        }
                         withIndent(
-                            indent = INDENT.repeat(n = 3),
+                            indent = CONTINUATION_INDENT,
                         ) {
-                            appendLine("but was: $it")
+                            appendLine(formatted)
                         }
                     }
 
@@ -45,7 +54,7 @@ internal object AssertionFailedMessageFormatter {
         }
     }
 
-    private fun formatValue(value: Any?): Any? =
+    internal fun formatValue(value: Any?): Any? =
         when (value) {
             null -> "null"
             is Number -> formatNumberValue(value)

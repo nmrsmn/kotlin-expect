@@ -20,7 +20,7 @@ val FormattingTest by testSuite {
                 |   ✓ is an instance of Number
                 |
                 |   ✗ is an instance of Long
-                |         but was: Int
+                |     but was: Int
             """.trimMargin()
 
             expectThat(subject = exception.message)
@@ -36,7 +36,7 @@ val FormattingTest by testSuite {
             val expected = """
                 |▼ Expect that 42:
                 |   ✗ is an instance of String
-                |         but was: Int
+                |     but was: Int
             """.trimMargin()
 
             expectThat(subject = exception.message)
