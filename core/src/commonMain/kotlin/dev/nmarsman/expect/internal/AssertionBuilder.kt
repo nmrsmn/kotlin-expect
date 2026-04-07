@@ -38,4 +38,15 @@ internal class AssertionBuilder<T>(
                 .toString(),
         )
     }
+
+    override fun <R> get(description: String?, function: T.() -> R): Assertion.Builder<R> {
+        val transformed = function.invoke(context.subject)
+
+        return AssertionBuilder(
+            context = AssertionSubject(
+                subject = transformed,
+                description = description,
+            ),
+        )
+    }
 }
