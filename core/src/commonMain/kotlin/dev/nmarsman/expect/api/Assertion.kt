@@ -1,5 +1,7 @@
 package dev.nmarsman.expect.api
 
+import dev.nmarsman.expect.internal.describe
+
 /**
  * Allows assertions to be made on the subject of an expectation.
  * This is the main interface for making assertions in the Kotlin Expect library.
@@ -114,7 +116,10 @@ interface Assertion {
          * @return An assertion builder whose subject is the value returned by [function].
          */
         fun <R> get(function: T.() -> R): Builder<R> =
-            get(description = null, function = function)
+            get(
+                description = function.describe(),
+                function = function,
+            )
 
         /**
          * Maps the assertion to the result of the [function].
