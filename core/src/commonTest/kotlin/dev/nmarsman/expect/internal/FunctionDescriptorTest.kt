@@ -11,21 +11,21 @@ val FunctionDescriptorTest by testSuite(displayName = "Function descriptor tests
             val function: Person.() -> String = Person::name
 
             expectThat(function.describe())
-                .isEqualTo("value of the property name")
+                .isEqualTo("value of the property name ({})")
         }
 
         test("KFunction reference describes as 'return value of'") {
             val function: Person.() -> String = Person::toString
 
             expectThat(function.describe())
-                .isEqualTo("return value of toString")
+                .isEqualTo("return value of toString ({})")
         }
 
-        test("Anonymous lambda describes as '<anonymous>'") {
+        test("Anonymous lambda describes as '<anonymous lambda>'") {
             val function: Person.() -> String = { name }
 
             expectThat(function.describe())
-                .isEqualTo("<anonymous>")
+                .isEqualTo("<anonymous lambda> ({})")
         }
     }
 }
