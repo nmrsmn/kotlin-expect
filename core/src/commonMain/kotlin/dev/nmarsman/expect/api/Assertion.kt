@@ -1,5 +1,7 @@
 package dev.nmarsman.expect.api
 
+import dev.nmarsman.expect.internal.describe
+
 /**
  * Allows assertions to be made on the subject of an expectation.
  * This is the main interface for making assertions in the Kotlin Expect library.
@@ -95,7 +97,7 @@ interface Assertion {
          * @return This builder for chaining.
          */
         fun describedAs(descriptor: () -> String): Builder<T> =
-            describedAs(descriptor())
+            describedAs(descriptor.invoke())
 
         /**
          * Sets a custom description for the subject of this assertion using a formatted value.
@@ -105,5 +107,28 @@ interface Assertion {
          * @return This builder for chaining.
          */
         fun describedAs(value: Any): Builder<T>
+
+        /**
+         * Maps the assertion to the result of the [function].
+         *
+         * @param R The type of the result returned by [function].
+         * @param function A lambda whose receiver is the current assertion.
+         * @return An assertion builder whose subject is the value returned by [function].
+         */
+        fun <R> get(function: T.() -> R): Builder<R> =
+            get(
+                description = function.describe(),
+                function = function,
+            )
+
+        /**
+         * Maps the assertion to the result of the [function].
+         *
+         * @param R The type of the result returned by [function].
+         * @param description The description of the mapped result.
+         * @param function A lambda whose receiver is the current assertion.
+         * @return An assertion builder whose subject is the value returned by [function].
+         */
+        fun <R> get(description: String? = null, function: T.() -> R): Builder<R>
     }
 }
