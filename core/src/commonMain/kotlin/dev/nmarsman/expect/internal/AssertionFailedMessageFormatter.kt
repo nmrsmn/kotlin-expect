@@ -38,7 +38,6 @@ internal object AssertionFailedMessageFormatter {
         when (context) {
             is AssertionGroup<*> -> formatAssertionGroup()
             is AssertionResult<*> -> formatAssertionResult()
-            else -> appendLine(formatValue(context).toString())
         }
 
     context(context: AssertionResult<*>)
@@ -56,12 +55,11 @@ internal object AssertionFailedMessageFormatter {
             }
         }
 
-    private fun AssertionNode<*>.describe(): String =
+    internal fun AssertionNode<*>.describe(): String =
         JoinedStringBuilderScope(StringBuilder(), joinBy = " ").apply {
             when (this@describe) {
                 is AssertionSubject<*> -> append("▼")
                 is AssertionResult<*> -> append(status.symbol)
-                else -> Unit
             }
 
             when (this@describe) {
@@ -69,10 +67,7 @@ internal object AssertionFailedMessageFormatter {
                 else -> Unit
             }
 
-            val description = when (this@describe) {
-                is DescribableNode<*> -> description ?: "{}"
-                else -> "{}"
-            }
+            val description = description ?: "{}"
 
             val appendix = when (this@describe) {
                 is AssertionGroup<*> -> ":"

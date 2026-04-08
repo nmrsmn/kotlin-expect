@@ -16,14 +16,14 @@ internal sealed interface AssertionNode<S> {
 /**
  * Represents a describable assertion node.
  */
-internal interface DescribableNode<S> : AssertionNode<S> {
+internal sealed interface DescribableNode<S> : AssertionNode<S> {
     var description: String?
 }
 
 /**
  * Represents a group of assertions that share a common subject.
  */
-internal interface AssertionGroup<S> : AssertionNode<S> {
+internal sealed interface AssertionGroup<S> : AssertionNode<S> {
     val children: Iterable<AssertionNode<*>>
 
     fun append(node: AssertionNode<*>)

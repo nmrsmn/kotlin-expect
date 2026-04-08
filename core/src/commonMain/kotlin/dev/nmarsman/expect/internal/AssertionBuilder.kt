@@ -31,9 +31,7 @@ internal class AssertionBuilder<T>(
     }
 
     override fun describedAs(description: String): Assertion.Builder<T> = also {
-        if (context is DescribableNode<*>) {
-            context.description = description
-        }
+        (context as DescribableNode<*>).description = description
     }
 
     override fun describedAs(value: Any): Assertion.Builder<T> =

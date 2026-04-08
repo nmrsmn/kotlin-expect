@@ -20,7 +20,9 @@ internal class AssertionSubject<T>(
     override val children: Iterable<AssertionNode<*>> = appendedChildren
 
     override val root: AssertionGroup<*>
-        get() = parent?.root ?: this
+        // Suppressed to void generating unreachable extra branch for code coverage
+        @Suppress("IfThenToElvis")
+        get() = if (parent != null) parent.root else this
 
     init {
         parent?.also {
