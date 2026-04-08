@@ -4,46 +4,49 @@ import dev.nmarsman.expect.api.Assertion
 import dev.nmarsman.expect.exception.AssertionFailedException
 
 internal class AssertionBuilder<T>(
-    private var context: AssertionSubject<T>,
+    private val context: AssertionGroup<T>,
 ) : Assertion.Builder<T> {
     override val subject: T
         get() = context.subject
-
-    private val results = mutableListOf<AssertionResult>()
 
     override fun assert(
         description: String,
         expected: Any?,
         assert: Assertion.(T) -> Unit,
     ): Assertion.Builder<T> = also {
-        val result = AssertionResult(description, expected)
-            .also { it.assert(subject) }
-            .also { results.add(it) }
+        val result = AssertionResult(
+            parent = context,
+            description = description,
+            expected = expected,
+        ).apply {
+            assert.invoke(this, subject)
+        }
+
+        context.append(result)
 
         if (result.failed) {
-            val message = AssertionFailedMessageFormatter.format(context, results)
+            val message = AssertionFailedMessageFormatter.format(context)
             throw AssertionFailedException(message, result.cause)
         }
     }
 
     override fun describedAs(description: String): Assertion.Builder<T> = also {
-        context = context.copy(
-            description = description,
-        )
+        (context as DescribableNode<*>).description = description
     }
 
-    override fun describedAs(value: Any): Assertion.Builder<T> = also {
-        context = context.copy(
-            description = AssertionFailedMessageFormatter.formatValue(value)
+    override fun describedAs(value: Any): Assertion.Builder<T> =
+        describedAs(
+            description = AssertionFailedMessageFormatter
+                .formatValue(value)
                 .toString(),
         )
-    }
 
     override fun <R> get(description: String?, function: T.() -> R): Assertion.Builder<R> {
         val transformed = function.invoke(context.subject)
 
         return AssertionBuilder(
             context = AssertionSubject(
+                parent = context,
                 subject = transformed,
                 description = description,
             ),
