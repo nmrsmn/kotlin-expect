@@ -2,10 +2,17 @@ package dev.nmarsman.expect.internal
 
 import dev.nmarsman.expect.api.Assertion
 
-internal class AssertionResult(
-    val description: String,
-    val expected: Any?,
-) : Assertion {
+internal class AssertionResult<S>(
+    override val parent: AssertionGroup<S>,
+    override var description: String? = null,
+    val expected: Any? = null,
+) : DescribableNode<S>, Assertion {
+    override val subject: S
+        get() = parent.subject
+
+    override val root: AssertionGroup<*>
+        get() = parent.root
+
     sealed interface Status {
         val symbol: String
 

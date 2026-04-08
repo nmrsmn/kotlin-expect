@@ -7,10 +7,30 @@ package dev.nmarsman.expect.internal
  * failure messages instead of the formatted representation of [subject].
  *
  * @param T The type of the subject.
+ * @property parent The parent node in the assertion graph.
  * @property subject The actual subject value.
  * @property description An optional description to use when formatting the subject.
  */
-internal data class AssertionSubject<T>(
-    val subject: T,
-    val description: String? = null,
-)
+internal class AssertionSubject<T>(
+    override val parent: AssertionGroup<*>?,
+    override val subject: T,
+    override var description: String? = null,
+) : AssertionGroup<T>, DescribableNode<T> {
+    private val appendedChildren = mutableListOf<AssertionNode<*>>()
+    override val children: Iterable<AssertionNode<*>> = appendedChildren
+
+    override val root: AssertionGroup<*>
+        get() = parent?.root ?: this
+
+    init {
+        parent?.also {
+            it.append(this)
+        }
+    }
+
+    constructor(subject: T) : this(parent = null, subject = subject)
+
+    override fun append(node: AssertionNode<*>) {
+        appendedChildren.add(node)
+    }
+}

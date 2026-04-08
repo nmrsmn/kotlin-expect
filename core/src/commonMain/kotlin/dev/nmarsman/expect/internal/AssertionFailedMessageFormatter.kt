@@ -1,58 +1,101 @@
 package dev.nmarsman.expect.internal
 
-import dev.nmarsman.expect.internal.AssertionResult.Status
 import kotlin.reflect.KClass
 
+@Suppress("TooManyFunctions")
 internal object AssertionFailedMessageFormatter {
     private const val INDENT = "   "
-    private const val CONTINUATION_INDENT = "     "
     private const val FORMATTED_VALUE_MAX_LENGTH = 40
 
-    fun <T> format(
-        context: AssertionSubject<T>,
-        results: List<AssertionResult>,
+    fun format(
+        context: AssertionGroup<*>,
     ): String = buildString {
-        appendLine("▼ Expect that ${context.description ?: formatValue(context.subject)}:")
-        results.forEach { result ->
-            appendLine(formatResult(result))
+        with(IndentedStringBuilderScope(builder = this, indent = "")) {
+            with(context.root) {
+                formatAssertionGroup()
+            }
         }
     }.trimEnd()
 
-    private fun formatResult(result: AssertionResult): String = buildString {
-        val description = when (result.description.contains("{}")) {
-            true -> result.description.replace(
-                oldValue = "{}",
-                newValue = formatValue(result.expected).toString(),
-            )
-
-            false -> result.description
-        }
+    context(context: AssertionGroup<*>)
+    private fun IndentedStringBuilderScope.formatAssertionGroup() {
+        appendLine(context.describe())
 
         withIndent {
-            appendLine("${result.status.symbol} $description")
+            format(children = context.children)
+        }
+    }
 
-            when (val status = result.status) {
-                is Status.Failed ->
-                    status.description?.let { description ->
-                        val formatted = when (description.contains("{}")) {
-                            true -> description.replace(
-                                oldValue = "{}",
-                                newValue = formatValue(status.actual).toString(),
-                            )
+    private fun IndentedStringBuilderScope.format(children: Iterable<AssertionNode<*>>) = children.forEach { node ->
+        with(node) {
+            formatNode()
+            appendLine()
+        }
+    }
 
-                            false -> description
-                        }
-                        withIndent(
-                            indent = CONTINUATION_INDENT,
-                        ) {
-                            appendLine(formatted)
-                        }
+    context(context: AssertionNode<*>)
+    private fun IndentedStringBuilderScope.formatNode() =
+        when (context) {
+            is AssertionGroup<*> -> formatAssertionGroup()
+            is AssertionResult<*> -> formatAssertionResult()
+            else -> appendLine(formatValue(context).toString())
+        }
+
+    context(context: AssertionResult<*>)
+    private fun IndentedStringBuilderScope.formatAssertionResult() =
+        withIndent(indent = "") {
+            appendLine(context.describe())
+
+            when (val status = context.status) {
+                is AssertionResult.Status.Failed if status.description != null ->
+                    withIndent(indent = "  ") {
+                        appendLine(status.description.replaceWith(status.actual))
                     }
 
                 else -> Unit
             }
         }
-    }
+
+    private fun AssertionNode<*>.describe(): String =
+        JoinedStringBuilderScope(StringBuilder(), joinBy = " ").apply {
+            when (this@describe) {
+                is AssertionSubject<*> -> append("▼")
+                is AssertionResult<*> -> append(status.symbol)
+                else -> Unit
+            }
+
+            when (this@describe) {
+                is AssertionSubject<*> if root == this@describe -> append("Expect that")
+                else -> Unit
+            }
+
+            val description = when (this@describe) {
+                is DescribableNode<*> -> description ?: "{}"
+                else -> "{}"
+            }
+
+            val appendix = when (this@describe) {
+                is AssertionGroup<*> -> ":"
+                else -> ""
+            }
+
+            val replacement = when (this@describe) {
+                is AssertionResult<*> -> expected
+                else -> subject
+            }
+
+            append("${description.replaceWith(replacement)}${appendix}")
+        }.toString()
+
+    private fun <T> String.replaceWith(subject: T) =
+        when (contains("{}")) {
+            true -> replace(
+                oldValue = "{}",
+                newValue = formatValue(subject).toString(),
+            )
+
+            else -> this
+        }
 
     internal fun formatValue(value: Any?): Any? =
         when (value) {
@@ -101,15 +144,31 @@ internal object AssertionFailedMessageFormatter {
             else -> substring(0, maxLength) + "…"
         }
 
-    private fun StringBuilder.withIndent(indent: String = INDENT, block: IndentedStringBuilderScope.() -> Unit) {
+    private fun Appendable.withIndent(indent: String = INDENT, block: IndentedStringBuilderScope.() -> Unit) {
         IndentedStringBuilderScope(this, indent).block()
     }
 
     private class IndentedStringBuilderScope(
-        private val builder: StringBuilder,
-        val indent: String,
+        val builder: Appendable,
+        private val indent: String = INDENT,
     ) : Appendable by builder {
-        override fun append(value: CharSequence?): StringBuilder =
-            builder.append(indent).append(value)
+        override fun append(value: CharSequence?): Appendable =
+            builder.append("$indent$value")
+
+        fun appendLine(value: CharSequence?): Appendable =
+            builder.appendLine("$indent$value")
+    }
+
+    private class JoinedStringBuilderScope(
+        private val builder: StringBuilder,
+        val joinBy: String = " ",
+    ) : Appendable by builder {
+        override fun append(value: CharSequence?): Appendable =
+            when (builder.isEmpty()) {
+                false -> builder.append(joinBy).append(value)
+                true -> builder.append(value)
+            }
+
+        override fun toString(): String = builder.toString()
     }
 }
