@@ -1,7 +1,8 @@
+@file:Suppress("TooManyFunctions")
+
 package dev.nmarsman.expect.assertions
 
 import dev.nmarsman.expect.api.Assertion
-import dev.nmarsman.expect.assertions.matches
 
 fun <T : CharSequence?> Assertion.Builder<T>.isNullOrEmpty(): Assertion.Builder<T> =
     assertThat(description = "is null or empty") {
@@ -41,35 +42,51 @@ fun <T : CharSequence> Assertion.Builder<T>.hasLength(expected: Int): Assertion.
         }
     }
 
+@Suppress("ktlint:standard:blank-line-between-when-conditions")
 fun <T : CharSequence> Assertion.Builder<T>.startsWith(expected: Char): Assertion.Builder<T> =
     assert(description = "starts with {}", expected = expected) {
         when (it.startsWith(expected)) {
             true -> pass()
-            else -> fail(actual = it.first())
+            else -> fail(
+                description = "but started with {}",
+                actual = it.first(),
+            )
         }
     }
 
+@Suppress("ktlint:standard:blank-line-between-when-conditions")
 fun <T : CharSequence> Assertion.Builder<T>.startsWith(expected: CharSequence): Assertion.Builder<T> =
     assert(description = "starts with {}", expected = expected) {
         when (it.startsWith(expected)) {
             true -> pass()
-            else -> fail(actual = it.take(expected.length))
+            else -> fail(
+                description = "but started with {}",
+                actual = it.take(expected.length),
+            )
         }
     }
 
+@Suppress("ktlint:standard:blank-line-between-when-conditions")
 fun <T : CharSequence> Assertion.Builder<T>.endsWith(expected: Char): Assertion.Builder<T> =
     assert(description = "ends with {}", expected = expected) {
         when (it.endsWith(expected)) {
             true -> pass()
-            else -> fail(actual = it.last())
+            else -> fail(
+                description = "but ended with {}",
+                actual = it.last(),
+            )
         }
     }
 
+@Suppress("ktlint:standard:blank-line-between-when-conditions")
 fun <T : CharSequence> Assertion.Builder<T>.endsWith(expected: CharSequence): Assertion.Builder<T> =
     assert(description = "ends with {}", expected = expected) {
         when (it.endsWith(expected)) {
             true -> pass()
-            else -> fail(actual = it.takeLast(expected.length))
+            else -> fail(
+                description = "but ended with {}",
+                actual = it.takeLast(expected.length),
+            )
         }
     }
 
