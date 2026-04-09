@@ -33,3 +33,14 @@ fun <T> Assertion.Builder<T?>.isNull(): Assertion.Builder<Nothing> = assert(
         else -> fail()
     }
 } as Assertion.Builder<Nothing>
+
+@Suppress("UNCHECKED_CAST")
+fun <T> Assertion.Builder<T?>.isNotNull(): Assertion.Builder<T> =
+    assert(
+        description = "is not null",
+    ) {
+        when (it) {
+            null -> fail()
+            else -> pass()
+        }
+    } as Assertion.Builder<T>
