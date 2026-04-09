@@ -9,8 +9,8 @@ inline fun <reified T> Assertion.Builder<*>.isA(): Assertion.Builder<T> = assert
 ) {
     when (it) {
         is T -> pass()
-        null -> fail(description = "but was: {}", actual = null)
-        else -> fail(description = "but was: {}", actual = it::class)
+        null -> fail(actual = null)
+        else -> fail(actual = it::class)
     }
 } as Assertion.Builder<T>
 
