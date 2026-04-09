@@ -110,6 +110,16 @@ expectThat(null)
     .isNull()
 ```
 
+### Boolean checking
+
+```kotlin
+expectThat(true)
+    .isTrue()
+
+expectThat(false)
+    .isFalse()
+```
+
 ### Chaining assertions
 
 Assertions return the builder, so you can chain multiple checks on the same subject:
