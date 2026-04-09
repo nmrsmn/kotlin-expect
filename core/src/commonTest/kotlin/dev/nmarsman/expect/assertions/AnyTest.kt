@@ -2,10 +2,13 @@ package dev.nmarsman.expect.assertions
 
 import de.infix.testBalloon.framework.core.testSuite
 import dev.nmarsman.expect.api.expectThat
+import dev.nmarsman.expect.api.expectThrows
 import dev.nmarsman.expect.exception.AssertionFailedException
 import kotlin.test.DefaultAsserter.fail
 
-val AnyAssertionTest by testSuite {
+val AnyAssertionTest by testSuite(
+    displayName = "Any assertion tests",
+) {
     testSuite(name = "subject 'is A' assertions") {
         test(name = "isA should pass if the subject is an instance of the expected type") {
             expectThat("value")
@@ -54,6 +57,20 @@ val AnyAssertionTest by testSuite {
                 fail("Test should have thrown")
             } catch (_: AssertionFailedException) {
                 // Test should have thrown
+            }
+        }
+    }
+
+    testSuite(name = "`is not null` assertions") {
+        test("Passes if the subject is not null") {
+            expectThat("subject" as String?)
+                .isNotNull()
+        }
+
+        test("Fails if the subject is null") {
+            expectThrows<AssertionError> {
+                expectThat(null)
+                    .isNotNull()
             }
         }
     }

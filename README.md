@@ -120,6 +120,32 @@ expectThat(false)
     .isFalse()
 ```
 
+### CharSequence assertions
+
+```kotlin
+expectThat("")
+    .isEmpty()
+
+expectThat("hello")
+    .isNotEmpty()
+    .isNotBlank()
+    .hasLength(5)
+
+expectThat("hello world")
+    .startsWith("hello")
+    .endsWith("world")
+    .contains("lo wo")
+
+expectThat("Hello World")
+    .containsIgnoringCase("hello world")
+
+expectThat("abc123")
+    .matches(Regex("[a-z]+\\d+"))
+
+expectThat("Hello World")
+    .matchesIgnoringCase(Regex("hello world"))
+```
+
 ### Chaining assertions
 
 Assertions return the builder, so you can chain multiple checks on the same subject:

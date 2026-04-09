@@ -9,8 +9,8 @@ inline fun <reified T> Assertion.Builder<*>.isA(): Assertion.Builder<T> = assert
 ) {
     when (it) {
         is T -> pass()
-        null -> fail(description = "but was: {}", actual = null)
-        else -> fail(description = "but was: {}", actual = it::class)
+        null -> fail(actual = null)
+        else -> fail(actual = it::class)
     }
 } as Assertion.Builder<T>
 
@@ -33,3 +33,14 @@ fun <T> Assertion.Builder<T?>.isNull(): Assertion.Builder<Nothing> = assert(
         else -> fail()
     }
 } as Assertion.Builder<Nothing>
+
+@Suppress("UNCHECKED_CAST")
+fun <T> Assertion.Builder<T?>.isNotNull(): Assertion.Builder<T> =
+    assert(
+        description = "is not null",
+    ) {
+        when (it) {
+            null -> fail()
+            else -> pass()
+        }
+    } as Assertion.Builder<T>

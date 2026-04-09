@@ -29,7 +29,11 @@ interface Assertion {
      *      replace `{}` in [description], if present.
      * @param cause An optional Throwable that caused the failure.
      */
-    fun fail(description: String, actual: Any?, cause: Throwable? = null)
+    fun fail(
+        description: String = "but was: {}",
+        actual: Any?,
+        cause: Throwable? = null,
+    )
 
     /**
      * Mark the result of the assertion as successful.
@@ -79,6 +83,24 @@ interface Assertion {
             expected: Any?,
             assert: Assertion.(T) -> Unit,
         ): Builder<T>
+
+        /**
+         * Evaluates a boolean condition.
+         * This is a helper method for implementing simple type of assertions.
+         *
+         * @param description A description for the condition of the assertion.
+         * @param assert A function that returns true, if the assertion passes.
+         *      false, if the assertion fails.
+         * @return The chained assertion builder.
+         */
+        fun assertThat(
+            description: String,
+            assert: (T) -> Boolean,
+        ): Builder<T> = assert(
+            description = description,
+        ) {
+            if (assert(it)) pass() else fail()
+        }
 
         /**
          * Sets a custom description for the subject of this assertion.
