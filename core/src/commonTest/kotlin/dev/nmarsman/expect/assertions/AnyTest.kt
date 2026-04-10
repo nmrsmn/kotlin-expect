@@ -61,6 +61,46 @@ val AnyAssertionTest by testSuite(
         }
     }
 
+    testSuite(name = "`isEqualTo` assertions") {
+        test(name = "Passes if the subject is equal to the expected value") {
+            expectThat("subject")
+                .isEqualTo("subject")
+        }
+
+        test(name = "Fails if the subject is not equal to the expected value") {
+            expectThrows<AssertionFailedException> {
+                expectThat("subject")
+                    .isEqualTo("value")
+            }
+        }
+
+        test(name = "Fails if the expected value is `null`") {
+            expectThrows<AssertionFailedException> {
+                expectThat("subject")
+                    .isEqualTo(null)
+            }
+        }
+    }
+
+    testSuite(name = "`isNotEqualTo` assertions") {
+        test(name = "Passes if the subject is not equal to the expected value") {
+            expectThat("subject")
+                .isNotEqualTo("value")
+        }
+
+        test(name = "Passes if the expected value is `null`") {
+            expectThat("subject")
+                .isNotEqualTo(null)
+        }
+
+        test(name = "Fails if the subject is equal to the expected value") {
+            expectThrows<AssertionFailedException> {
+                expectThat("subject")
+                    .isNotEqualTo("subject")
+            }
+        }
+    }
+
     testSuite(name = "`isNull` assertions") {
         test("isNull should pass if the subject is null") {
             expectThat(null)

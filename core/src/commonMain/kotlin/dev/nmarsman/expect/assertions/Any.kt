@@ -35,6 +35,16 @@ fun <T> Assertion.Builder<T>.isEqualTo(expected: T?): Assertion.Builder<T> = ass
     }
 }
 
+fun <T> Assertion.Builder<T>.isNotEqualTo(expected: T?): Assertion.Builder<T> = assert(
+    description = "is not equal to {}",
+    expected = expected,
+) {
+    when (it) {
+        expected -> fail()
+        else -> pass()
+    }
+}
+
 @Suppress("UNCHECKED_CAST")
 fun <T> Assertion.Builder<T?>.isNull(): Assertion.Builder<Nothing> = assert(
     description = "is null",
