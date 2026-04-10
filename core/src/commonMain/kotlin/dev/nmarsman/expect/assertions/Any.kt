@@ -65,3 +65,17 @@ fun <T> Assertion.Builder<T?>.isNotNull(): Assertion.Builder<T> =
             else -> pass()
         }
     } as Assertion.Builder<T>
+
+fun <T> Assertion.Builder<T>.isSameInstanceAs(expected: T?): Assertion.Builder<T> = assert(
+    description = "is the same instance as {}",
+    expected = expected,
+) {
+    if (it === expected) pass() else fail()
+}
+
+fun <T> Assertion.Builder<T>.isNotSameInstanceAs(expected: T?): Assertion.Builder<T> = assert(
+    description = "is not the same instance as {}",
+    expected = expected,
+) {
+    if (it !== expected) pass() else fail()
+}

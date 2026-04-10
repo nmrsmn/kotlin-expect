@@ -4,6 +4,7 @@ import de.infix.testBalloon.framework.core.testSuite
 import dev.nmarsman.expect.api.expectThat
 import dev.nmarsman.expect.api.expectThrows
 import dev.nmarsman.expect.exception.AssertionFailedException
+import dev.nmarsman.expect.helper.Person
 import kotlin.test.DefaultAsserter.fail
 
 val AnyAssertionTest by testSuite(
@@ -125,6 +126,56 @@ val AnyAssertionTest by testSuite(
             expectThrows<AssertionFailedException> {
                 expectThat(null)
                     .isNotNull()
+            }
+        }
+    }
+
+    testSuite(name = "`isSameInstanceAs` assertions") {
+        test("Passes if the subject is the same instance as the expected value") {
+            val subject = "subject"
+
+            expectThat(subject)
+                .isSameInstanceAs(subject)
+        }
+
+        test("Fails if the subject is not the same instance as the expected value - value equal") {
+            val subject = Person(name = "John", age = 23)
+            val expected = Person(name = "John", age = 23)
+
+            expectThrows<AssertionFailedException> {
+                expectThat(subject)
+                    .isSameInstanceAs(expected)
+            }
+        }
+
+        test("Fails if the subject is not the same instance as the expected value - value not equal") {
+            expectThrows<AssertionFailedException> {
+                expectThat("value")
+                    .isSameInstanceAs("other")
+            }
+        }
+    }
+
+    testSuite(name = "`isNotSameInstanceAs` assertions") {
+        test("Passes if the subject is not the same instance as the expected value - value equal") {
+            val subject = Person(name = "John", age = 23)
+            val expected = Person(name = "John", age = 23)
+
+            expectThat(subject)
+                .isNotSameInstanceAs(expected)
+        }
+
+        test("Passes if the subject is not the same instance as the expected value - value not equal") {
+            expectThat("value")
+                .isNotSameInstanceAs("other")
+        }
+
+        test("Fails if the subject is the same instance as the expected value") {
+            expectThrows<AssertionFailedException> {
+                val subject = "subject"
+
+                expectThat(subject)
+                    .isNotSameInstanceAs(subject)
             }
         }
     }
