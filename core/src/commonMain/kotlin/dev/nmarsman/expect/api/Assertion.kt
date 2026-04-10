@@ -43,6 +43,18 @@ interface Assertion {
     fun pass(description: String? = null)
 
     /**
+     * Mark the result of the assertion as successful.
+     *
+     * @param description An optional description of the success. Can provide context about why the assertion passed.
+     * @param actual The actual value that was encountered. Will be formatted and used to
+     *      replace `{}` in [description], if present.
+     */
+    fun pass(
+        description: String? = "was actually: {}",
+        actual: Any?,
+    )
+
+    /**
      * Used to construct assertions.
      *
      * @param T the type of the subject being asserted on.

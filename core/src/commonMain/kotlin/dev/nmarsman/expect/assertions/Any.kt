@@ -14,6 +14,18 @@ inline fun <reified T> Assertion.Builder<*>.isA(): Assertion.Builder<T> = assert
     }
 } as Assertion.Builder<T>
 
+@Suppress("UNCHECKED_CAST")
+inline fun <reified T> Assertion.Builder<*>.isNotA(): Assertion.Builder<T> = assert(
+    description = "is not an instance of {}",
+    expected = T::class,
+) {
+    when (it) {
+        is T -> fail()
+        null -> pass(actual = null)
+        else -> pass(actual = it::class)
+    }
+} as Assertion.Builder<T>
+
 fun <T> Assertion.Builder<T>.isEqualTo(expected: T?): Assertion.Builder<T> = assert(
     description = "is equal to {}",
     expected = expected,

@@ -9,66 +9,80 @@ import kotlin.test.DefaultAsserter.fail
 val AnyAssertionTest by testSuite(
     displayName = "Any assertion tests",
 ) {
-    testSuite(name = "subject 'is A' assertions") {
-        test(name = "isA should pass if the subject is an instance of the expected type") {
+    testSuite(name = "`isA` assertions") {
+        test(name = "Passes if the subject is an instance of the expected type") {
             expectThat("value")
                 .isA<String>()
         }
 
-        test(name = "isA should pass if the subject is an instance of a subtype of the expected type") {
+        test(name = "Passes if the subject is an instance of a subtype of the expected type") {
             expectThat(1L)
                 .isA<Number>()
         }
 
-        test(name = "isA should fail if the subject is not an instance of the expected type") {
-            try {
+        test(name = "Fails if the subject is not an instance of the expected type") {
+            expectThrows<AssertionFailedException> {
                 expectThat("value")
                     .isA<Number>()
-
-                fail("Test should have thrown")
-            } catch (_: AssertionFailedException) {
-                // Test should have thrown
             }
         }
 
-        test(name = "isA should fail if the subject is null") {
-            try {
+        test(name = "Fails if the subject is `null`") {
+            expectThrows<AssertionFailedException> {
                 expectThat(null)
                     .isA<String>()
-
-                fail("Test should have thrown")
-            } catch (_: AssertionFailedException) {
-                // Test should have thrown
             }
         }
     }
 
-    testSuite(name = "subject 'is null' assertions") {
+    testSuite(name = "`isNotA` assertions") {
+        test(name = "Passes if the subject is not an instance of the expected type") {
+            expectThat("value")
+                .isNotA<Number>()
+        }
+
+        test(name = "Passes if the subject is `null`") {
+            expectThat(null)
+                .isNotA<String>()
+        }
+
+        test(name = "Fails if the subject is an instance of the expected type") {
+            expectThrows<AssertionFailedException> {
+                expectThat("value")
+                    .isNotA<String>()
+            }
+        }
+
+        test(name = "Fails if the subject is an instance of a subtype of the expected type") {
+            expectThrows<AssertionFailedException> {
+                expectThat(1L)
+                    .isNotA<Number>()
+            }
+        }
+    }
+
+    testSuite(name = "`isNull` assertions") {
         test("isNull should pass if the subject is null") {
             expectThat(null)
                 .isNull()
         }
 
         test("isNull should fail if the subject is not null") {
-            try {
+            expectThrows<AssertionFailedException> {
                 expectThat("value" as String?)
                     .isNull()
-
-                fail("Test should have thrown")
-            } catch (_: AssertionFailedException) {
-                // Test should have thrown
             }
         }
     }
 
-    testSuite(name = "`is not null` assertions") {
+    testSuite(name = "`isNotNull` assertions") {
         test("Passes if the subject is not null") {
             expectThat("subject" as String?)
                 .isNotNull()
         }
 
         test("Fails if the subject is null") {
-            expectThrows<AssertionError> {
+            expectThrows<AssertionFailedException> {
                 expectThat(null)
                     .isNotNull()
             }
