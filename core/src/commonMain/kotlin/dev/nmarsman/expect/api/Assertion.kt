@@ -50,7 +50,7 @@ interface Assertion {
      *      replace `{}` in [description], if present.
      */
     fun pass(
-        description: String? = "was actually: {}",
+        description: String? = "but was: {}",
         actual: Any?,
     )
 

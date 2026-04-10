@@ -2,29 +2,57 @@ package dev.nmarsman.expect
 
 import de.infix.testBalloon.framework.core.testSuite
 import dev.nmarsman.expect.api.expectThat
+import dev.nmarsman.expect.api.expectThrows
 import dev.nmarsman.expect.assertions.isA
 import dev.nmarsman.expect.assertions.isEqualTo
+import dev.nmarsman.expect.assertions.isNotA
 import dev.nmarsman.expect.assertions.isNull
 import dev.nmarsman.expect.exception.AssertionFailedException
 import dev.nmarsman.expect.helper.Person
 
-val FormattingTest by testSuite {
-    test(name = "A failing chained assertion formats the message correctly") {
-        try {
-            expectThat(42)
-                .isA<Number>()
-                .isA<Long>()
-        } catch (exception: AssertionFailedException) {
-            val expected = """
-                |▼ Expect that 42:
-                |   ✓ is an instance of Number
-                |
-                |   ✗ is an instance of Long
-                |     but was: Int
-            """.trimMargin()
+val FormattingTest by testSuite(
+    displayName = "Assertion failure message formatting tests",
+) {
+    testSuite(name = "Chained assertions are formatted correctly") {
+        test(name = "Without a descriptive passing message") {
+            expectThrows<AssertionFailedException> {
+                expectThat(42)
+                    .isA<Number>()
+                    .isA<Long>()
+            }.also {
+                expectThat(it.subject.message)
+                    .isEqualTo(
+                        """
+                            |▼ Expect that 42:
+                            |   ✓ is an instance of Number
+                            |
+                            |   ✗ is an instance of Long
+                            |     but was: Int
+                        """.trimMargin()
+                    )
+            }
+        }
 
-            expectThat(subject = exception.message)
-                .isEqualTo(expected = expected)
+        test(name = "With a descriptive passing message") {
+            expectThrows<AssertionFailedException> {
+                expectThat(42)
+                    .isNotA<Long>()
+                    .isA<Int>()
+                    .isEqualTo(1)
+            }.also {
+                expectThat(it.subject.message)
+                    .isEqualTo(
+                        """
+                            |▼ Expect that 42:
+                            |   ✓ is not an instance of Long
+                            |     but was: Int
+                            |
+                            |   ✓ is an instance of Int
+                            |
+                            |   ✗ is equal to 1
+                        """.trimMargin()
+                    )
+            }
         }
     }
 

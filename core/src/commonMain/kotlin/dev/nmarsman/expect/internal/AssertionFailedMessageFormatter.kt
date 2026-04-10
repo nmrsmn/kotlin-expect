@@ -46,6 +46,11 @@ internal object AssertionFailedMessageFormatter {
             appendLine(context.describe())
 
             when (val status = context.status) {
+                is AssertionResult.Status.Passed if status.description != null ->
+                    withIndent(indent = "  ") {
+                        appendLine(status.description.replaceWith(status.actual))
+                    }
+
                 is AssertionResult.Status.Failed if status.description != null ->
                     withIndent(indent = "  ") {
                         appendLine(status.description.replaceWith(status.actual))
