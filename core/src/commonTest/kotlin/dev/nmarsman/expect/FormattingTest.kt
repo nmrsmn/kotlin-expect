@@ -28,7 +28,7 @@ val FormattingTest by testSuite(
                             |
                             |   ✗ is an instance of Long
                             |     but was: Int
-                        """.trimMargin()
+                        """.trimMargin(),
                     )
             }
         }
@@ -50,7 +50,7 @@ val FormattingTest by testSuite(
                             |   ✓ is an instance of Int
                             |
                             |   ✗ is equal to 1
-                        """.trimMargin()
+                        """.trimMargin(),
                     )
             }
         }
