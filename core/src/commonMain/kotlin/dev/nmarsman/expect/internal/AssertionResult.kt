@@ -18,6 +18,7 @@ internal class AssertionResult<S>(
 
         data class Passed(
             val description: String?,
+            val actual: Any?,
         ) : Status {
             override val symbol: String
                 get() = "✓"
@@ -51,6 +52,10 @@ internal class AssertionResult<S>(
     }
 
     override fun pass(description: String?) {
-        status = Status.Passed(description)
+        status = Status.Passed(description, null)
+    }
+
+    override fun pass(description: String?, actual: Any?) {
+        status = Status.Passed(description, actual)
     }
 }

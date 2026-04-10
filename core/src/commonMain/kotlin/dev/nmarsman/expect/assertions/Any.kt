@@ -14,6 +14,17 @@ inline fun <reified T> Assertion.Builder<*>.isA(): Assertion.Builder<T> = assert
     }
 } as Assertion.Builder<T>
 
+inline fun <reified T> Assertion.Builder<*>.isNotA() = assert(
+    description = "is not an instance of {}",
+    expected = T::class,
+) {
+    when (it) {
+        is T -> fail()
+        null -> pass(actual = null)
+        else -> pass(actual = it::class)
+    }
+}
+
 fun <T> Assertion.Builder<T>.isEqualTo(expected: T?): Assertion.Builder<T> = assert(
     description = "is equal to {}",
     expected = expected,
@@ -21,6 +32,16 @@ fun <T> Assertion.Builder<T>.isEqualTo(expected: T?): Assertion.Builder<T> = ass
     when (it) {
         expected -> pass()
         else -> fail()
+    }
+}
+
+fun <T> Assertion.Builder<T>.isNotEqualTo(expected: T?): Assertion.Builder<T> = assert(
+    description = "is not equal to {}",
+    expected = expected,
+) {
+    when (it) {
+        expected -> fail()
+        else -> pass()
     }
 }
 
@@ -44,3 +65,17 @@ fun <T> Assertion.Builder<T?>.isNotNull(): Assertion.Builder<T> =
             else -> pass()
         }
     } as Assertion.Builder<T>
+
+fun <T> Assertion.Builder<T>.isSameInstanceAs(expected: T?): Assertion.Builder<T> = assert(
+    description = "is the same instance as {}",
+    expected = expected,
+) {
+    if (it === expected) pass() else fail()
+}
+
+fun <T> Assertion.Builder<T>.isNotSameInstanceAs(expected: T?): Assertion.Builder<T> = assert(
+    description = "is not the same instance as {}",
+    expected = expected,
+) {
+    if (it !== expected) pass() else fail()
+}
