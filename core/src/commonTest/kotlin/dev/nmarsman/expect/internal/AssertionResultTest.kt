@@ -7,7 +7,7 @@ import dev.nmarsman.expect.assertions.isEqualTo
 import dev.nmarsman.expect.assertions.isNull
 
 val AssertionResultTest by testSuite(
-    displayName = "AssertionResult tests",
+    displayName = "Assertion result tests",
 ) {
     val subject = testFixture {
         AssertionSubject(
@@ -61,11 +61,11 @@ val AssertionResultTest by testSuite(
     }
 
     testSuite(name = "Status") {
-        test(name = "Default status is Failed") {
+        test(name = "Default status is Pending") {
             val result = AssertionResult(parent = subject.invoke(), description = "description", expected = "expected")
 
             expectThat(subject = result.status)
-                .isA<AssertionResult.Status.Failed>()
+                .isA<AssertionResult.Status.Pending>()
         }
 
         test(name = "Status is Passed after calling pass") {

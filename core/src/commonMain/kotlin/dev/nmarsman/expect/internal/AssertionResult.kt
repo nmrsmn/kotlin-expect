@@ -16,6 +16,11 @@ internal class AssertionResult<S>(
     sealed interface Status {
         val symbol: String
 
+        data object Pending : Status {
+            override val symbol: String
+                get() = "…"
+        }
+
         data class Passed(
             val description: String?,
             val actual: Any?,
@@ -34,7 +39,7 @@ internal class AssertionResult<S>(
         }
     }
 
-    var status: Status = Status.Failed(null, null, null)
+    var status: Status = Status.Pending
         private set
 
     val failed: Boolean
