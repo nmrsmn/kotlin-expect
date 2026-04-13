@@ -55,10 +55,42 @@ interface Assertion {
     )
 
     /**
+     * An assertion composed of multiple conditions whose overall result
+     * is determined by aggregation of those conditions' results.
+     */
+    interface ComposedAssertion : Assertion {
+        /**
+         * @property all True if all composed assertions passed, otherwise false.
+         */
+        val all: Boolean
+
+        /**
+         * @property any True if at least one composed assertion passed, otherwise false.
+         */
+        val any: Boolean
+
+        /**
+         * @property none True if all composed assertions failed, otherwise false.
+         */
+        val none: Boolean
+
+        /**
+         * @property failed The number of composed assertions that failed.
+         */
+        val failed: Int
+
+        /**
+         * @property passed The number of composed assertions that passed.
+         */
+        val passed: Int
+    }
+
+    /**
      * Used to construct assertions.
      *
      * @param T the type of the subject being asserted on.
      */
+    @Suppress("ComplexInterface")
     interface Builder<T> {
         val subject: T
 
@@ -115,6 +147,34 @@ interface Assertion {
         }
 
         /**
+         * Allows an assertion to be composed of multiple assertions.
+         *
+         * @param description A description for the condition the assertion evaluates.
+         * @param assertions A group of assertions that will be evaluated.
+         */
+        fun compose(
+            description: String,
+            assertions: Builder<T>.(T) -> Unit,
+        ) = compose(
+            description = description,
+            expected = null,
+            assertions = assertions,
+        )
+
+        /**
+         * Allows an assertion to be composed of multiple assertions.
+         *
+         * @param description A description for the condition the assertion evaluates.
+         * @param expected The expected value of the comparison.
+         * @param assertions A group of assertions that will be evaluated.
+         */
+        fun compose(
+            description: String,
+            expected: Any?,
+            assertions: Builder<T>.(T) -> Unit,
+        ): ComposedBuilder<T>
+
+        /**
          * Sets a custom description for the subject of this assertion.
          * When set, this description is used in failure messages instead of the formatted subject value.
          *
@@ -164,5 +224,20 @@ interface Assertion {
          * @return An assertion builder whose subject is the value returned by [function].
          */
         fun <R> get(description: String? = null, function: T.() -> R): Builder<R>
+    }
+
+    /**
+     * Used to construct composed assertions, which are assertions that consist of multiple conditions.
+     */
+    interface ComposedBuilder<T> {
+        /**
+         * Determines the overall result of the composed assertion based on the results of its individual assertions.
+         */
+        infix fun then(block: ComposedAssertion.() -> Unit): Builder<T>
+
+        /**
+         * Determines the overall result of the composed assertion based on the results of its individual assertions.
+         */
+        infix fun require(block: ComposedAssertion.() -> Boolean): Builder<T>
     }
 }
