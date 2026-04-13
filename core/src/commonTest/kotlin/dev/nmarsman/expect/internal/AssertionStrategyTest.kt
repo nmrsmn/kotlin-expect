@@ -79,7 +79,7 @@ val AssertionStrategyTest by testSuite(
                 AssertionSubject(parent = root, subject = 42).apply {
                     append(
                         node = AssertionResult(parent = this)
-                            .also(AssertionResult<*>::fail)
+                            .also(AssertionResult<*>::fail),
                     )
                 }
 
@@ -94,7 +94,7 @@ val AssertionStrategyTest by testSuite(
                 AssertionSubject(parent = root, subject = 42).apply {
                     append(
                         node = AssertionResult(parent = this)
-                            .also(AssertionResult<*>::pass)
+                            .also(AssertionResult<*>::pass),
                     )
                 }
 
