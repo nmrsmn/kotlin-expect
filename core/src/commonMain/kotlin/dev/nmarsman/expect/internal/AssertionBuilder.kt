@@ -1,10 +1,10 @@
 package dev.nmarsman.expect.internal
 
 import dev.nmarsman.expect.api.Assertion
-import dev.nmarsman.expect.exception.AssertionFailedException
 
 internal class AssertionBuilder<T>(
     private val context: AssertionGroup<T>,
+    private val strategy: AssertionStrategy = AssertionStrategy.Throwing,
 ) : Assertion.Builder<T> {
     override val subject: T
         get() = context.subject
@@ -20,14 +20,10 @@ internal class AssertionBuilder<T>(
             expected = expected,
         ).apply {
             assert.invoke(this, subject)
+            context.append(this)
         }
 
-        context.append(result)
-
-        if (result.failed) {
-            val message = AssertionFailedMessageFormatter.format(context)
-            throw AssertionFailedException(message, result.cause)
-        }
+        strategy.evaluate(result)
     }
 
     override fun describedAs(description: String): Assertion.Builder<T> = also {
@@ -50,6 +46,7 @@ internal class AssertionBuilder<T>(
                 subject = transformed,
                 description = description,
             ),
+            strategy = strategy,
         )
     }
 }

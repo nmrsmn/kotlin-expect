@@ -1,6 +1,7 @@
 package dev.nmarsman.expect.api
 
 import dev.nmarsman.expect.internal.AssertionBuilder
+import dev.nmarsman.expect.internal.AssertionStrategy
 import dev.nmarsman.expect.internal.AssertionSubject
 
 /**
@@ -12,7 +13,10 @@ import dev.nmarsman.expect.internal.AssertionSubject
  * @return An assertion on the value of [subject].
  */
 fun <T> expectThat(subject: T): Assertion.Builder<T> =
-    AssertionBuilder(context = AssertionSubject(subject))
+    AssertionBuilder(
+        context = AssertionSubject(subject),
+        strategy = AssertionStrategy.Throwing,
+    )
 
 /**
  * Asserts that [block] throws an exception of type [T] when executed.
@@ -37,3 +41,28 @@ inline fun <reified T : Throwable> expectThrows(crossinline block: () -> Unit): 
                 else -> fail(description = "but threw {}", actual = it::class)
             }
         } as Assertion.Builder<T>
+
+/**
+ * Starts an assertion on the given [subject] and executes [block] using a collecting strategy
+ * that accumulates all assertion failures and throws them together at the end.
+ *
+ * This is useful for "soft assertions" where you want to see all failures
+ * at once rather than stopping at the first failure.
+ *
+ * @param T The type of the subject being asserted on.
+ * @param subject The value ([T]) to be asserted on.
+ * @param block A lambda with an [Assertion.Builder] receiver containing assertions on [subject].
+ * @throws dev.nmarsman.expect.exception.AssertionFailedException if any assertions in [block] fail.
+ */
+fun <T> expectThat(subject: T, block: Assertion.Builder<T>.() -> Unit): Assertion.Builder<T> =
+    AssertionSubject(subject).let { context ->
+        with(AssertionStrategy.Collecting) {
+            AssertionBuilder(
+                context = context,
+                strategy = this,
+            ).apply {
+                block.invoke(this)
+                throwCollectedFailures(context)
+            }
+        }
+    }
