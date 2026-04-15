@@ -23,6 +23,8 @@ comments:
 complexity:
     ComplexCondition:
         allowedConditions: 4
+    ComplexInterface:
+        ignoreOverloaded: true
     LabeledExpression:
         active: false
     LongParameterList:
@@ -30,6 +32,12 @@ complexity:
         allowedConstructorParameters: 7
     StringLiteralDuplication:
         allowedDuplications: 3
+    TooManyFunctions:
+        allowedFunctionsPerInterface: 12 # Default is 11, but [Assertion.Builder] has more functions, so we set it to 12.
+        ignoreDeprecated: true
+        ignoreInternal: true
+        ignoreOverridden: true
+        ignorePrivate: true
 
 naming:
     FunctionNameMaxLength:
