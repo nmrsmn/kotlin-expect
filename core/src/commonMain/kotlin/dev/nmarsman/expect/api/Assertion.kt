@@ -238,6 +238,12 @@ interface Assertion {
         /**
          * Determines the overall result of the composed assertion based on the results of its individual assertions.
          */
-        infix fun require(block: ComposedAssertion.() -> Boolean): Builder<T>
+        infix fun require(block: ComposedAssertion.() -> Boolean): Builder<T> =
+            then {
+                when (block.invoke(this)) {
+                    true -> pass()
+                    else -> fail()
+                }
+            }
     }
 }
