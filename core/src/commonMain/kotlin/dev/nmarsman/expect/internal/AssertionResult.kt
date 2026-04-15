@@ -1,12 +1,12 @@
 package dev.nmarsman.expect.internal
 
-import dev.nmarsman.expect.api.Assertion
+import dev.nmarsman.expect.api.Assertion.AtomicAssertion
 
 internal class AssertionResult<S>(
     override val parent: AssertionGroup<S>,
     override var description: String? = null,
     val expected: Any? = null,
-) : DescribableNode<S>, Assertion {
+) : DescribableNode<S>, AtomicAssertion {
     override val subject: S
         get() = parent.subject
 

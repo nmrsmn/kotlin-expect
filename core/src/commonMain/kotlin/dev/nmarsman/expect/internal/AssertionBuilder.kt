@@ -1,6 +1,7 @@
 package dev.nmarsman.expect.internal
 
 import dev.nmarsman.expect.api.Assertion
+import dev.nmarsman.expect.api.Assertion.AtomicAssertion
 
 internal class AssertionBuilder<T>(
     private val context: AssertionGroup<T>,
@@ -12,7 +13,7 @@ internal class AssertionBuilder<T>(
     override fun assert(
         description: String,
         expected: Any?,
-        assert: Assertion.(T) -> Unit,
+        assert: AtomicAssertion.(T) -> Unit,
     ): Assertion.Builder<T> = also {
         val result = AssertionResult(
             parent = context,
