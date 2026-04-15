@@ -75,14 +75,14 @@ interface Assertion {
         val none: Boolean
 
         /**
-         * @property failed The number of composed assertions that failed.
+         * @property failedCount The number of composed assertions that failed.
          */
-        val failed: Int
+        val failedCount: Int
 
         /**
-         * @property passed The number of composed assertions that passed.
+         * @property passedCount The number of composed assertions that passed.
          */
-        val passed: Int
+        val passedCount: Int
     }
 
     /**
@@ -154,7 +154,7 @@ interface Assertion {
          */
         fun compose(
             description: String,
-            assertions: Builder<T>.(T) -> Unit,
+            assertions: Builder<T>.() -> Unit,
         ) = compose(
             description = description,
             expected = null,
@@ -171,7 +171,7 @@ interface Assertion {
         fun compose(
             description: String,
             expected: Any?,
-            assertions: Builder<T>.(T) -> Unit,
+            assertions: Builder<T>.() -> Unit,
         ): ComposedBuilder<T>
 
         /**
