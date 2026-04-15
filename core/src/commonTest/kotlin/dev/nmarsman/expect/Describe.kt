@@ -52,7 +52,11 @@ val DescribeAssertionNodeTest by testSuite(
     ) {
         test(name = "Describe should properly format failed assertion result - without failure description") {
             val subject = AssertionSubject(subject = 42)
-            val result = AssertionResult(parent = subject, description = "is equal to {}", expected = 1).also {
+            val result = AssertionResult.AtomicResult(
+                parent = subject,
+                description = "is equal to {}",
+                expected = 1,
+            ).also {
                 it.fail()
             }
 
@@ -62,7 +66,11 @@ val DescribeAssertionNodeTest by testSuite(
 
         test(name = "Describe should properly format failed assertion result - with failure description") {
             val subject = AssertionSubject(subject = 42)
-            val result = AssertionResult(parent = subject, description = "is equal to {}", expected = 1).also {
+            val result = AssertionResult.AtomicResult(
+                parent = subject,
+                description = "is equal to {}",
+                expected = 1,
+            ).also {
                 it.fail(description = "but was Int")
             }
 
@@ -72,7 +80,11 @@ val DescribeAssertionNodeTest by testSuite(
 
         test(name = "Describe should properly format passed assertion result - without description") {
             val subject = AssertionSubject(subject = 42)
-            val result = AssertionResult(parent = subject, description = "is equal to {}", expected = 1).also {
+            val result = AssertionResult.AtomicResult(
+                parent = subject,
+                description = "is equal to {}",
+                expected = 1,
+            ).also {
                 it.pass()
             }
 
@@ -82,7 +94,11 @@ val DescribeAssertionNodeTest by testSuite(
 
         test(name = "Describe should properly format passed assertion result - with description") {
             val subject = AssertionSubject(subject = 42)
-            val result = AssertionResult(parent = subject, description = "is equal to {}", expected = 1).also {
+            val result = AssertionResult.AtomicResult(
+                parent = subject,
+                description = "is equal to {}",
+                expected = 1,
+            ).also {
                 it.pass(description = "but was Int")
             }
 

@@ -15,7 +15,7 @@ internal class AssertionBuilder<T>(
         expected: Any?,
         assert: AtomicAssertion.(T) -> Unit,
     ): Assertion.Builder<T> = also {
-        val result = AssertionResult(
+        val result = AssertionResult.AtomicResult(
             parent = context,
             description = description,
             expected = expected,

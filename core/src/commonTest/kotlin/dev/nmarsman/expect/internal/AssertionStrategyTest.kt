@@ -11,7 +11,7 @@ val AssertionStrategyTest by testSuite(
     testSuite(name = "Throwing strategy") {
         test(name = "Should not throw when assertion passed") {
             val context = AssertionSubject(subject = "subject")
-            val result = AssertionResult(parent = context)
+            val result = AssertionResult.AtomicResult(parent = context)
                 .also(AssertionResult<*>::pass)
                 .also { context.append(it) }
 
@@ -20,7 +20,7 @@ val AssertionStrategyTest by testSuite(
 
         test(name = "Should throw when assertion fails") {
             val context = AssertionSubject(subject = "subject")
-            val result = AssertionResult(parent = context)
+            val result = AssertionResult.AtomicResult(parent = context)
                 .also(AssertionResult<*>::fail)
                 .also { context.append(it) }
 
@@ -33,7 +33,7 @@ val AssertionStrategyTest by testSuite(
     testSuite(name = "Collecting strategy") {
         test(name = "Should not throw when assertion passed - without collecting failures explicitly") {
             val context = AssertionSubject(subject = "subject")
-            val result = AssertionResult(parent = context)
+            val result = AssertionResult.AtomicResult(parent = context)
                 .also(AssertionResult<*>::pass)
                 .also { context.append(it) }
 
@@ -42,7 +42,7 @@ val AssertionStrategyTest by testSuite(
 
         test(name = "Should not throw when assertion pass - with collecting failures explicitly") {
             val context = AssertionSubject(subject = "subject")
-            val result = AssertionResult(parent = context)
+            val result = AssertionResult.AtomicResult(parent = context)
                 .also(AssertionResult<*>::pass)
                 .also { context.append(it) }
 
@@ -52,7 +52,7 @@ val AssertionStrategyTest by testSuite(
 
         test(name = "Should not throw when assertion fails - without collecting failures explicitly") {
             val context = AssertionSubject(subject = "subject")
-            val result = AssertionResult(parent = context)
+            val result = AssertionResult.AtomicResult(parent = context)
                 .also(AssertionResult<*>::fail)
                 .also { context.append(it) }
 
@@ -61,7 +61,7 @@ val AssertionStrategyTest by testSuite(
 
         test(name = "Should throw when assertion fails - with collecting failures explicitly") {
             val context = AssertionSubject(subject = "subject")
-            val result = AssertionResult(parent = context)
+            val result = AssertionResult.AtomicResult(parent = context)
                 .also(AssertionResult<*>::fail)
                 .also { context.append(it) }
 
@@ -78,7 +78,7 @@ val AssertionStrategyTest by testSuite(
 
                 AssertionSubject(parent = root, subject = 42).apply {
                     append(
-                        node = AssertionResult(parent = this)
+                        node = AssertionResult.AtomicResult(parent = this)
                             .also(AssertionResult<*>::fail),
                     )
                 }
@@ -93,7 +93,7 @@ val AssertionStrategyTest by testSuite(
 
                 AssertionSubject(parent = root, subject = 42).apply {
                     append(
-                        node = AssertionResult(parent = this)
+                        node = AssertionResult.AtomicResult(parent = this)
                             .also(AssertionResult<*>::pass),
                     )
                 }
