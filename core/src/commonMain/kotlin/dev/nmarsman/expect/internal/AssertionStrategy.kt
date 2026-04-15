@@ -20,7 +20,12 @@ internal sealed interface AssertionStrategy {
         override fun <T> evaluate(result: AssertionResult<T>) {
             if (result.failed) {
                 val message = AssertionFailedMessageFormatter.format(context = result.root)
-                throw AssertionFailedException(message, result.cause)
+                throw AssertionFailedException(
+                    message = message,
+                    expected = result.expected,
+                    actual = result.subject,
+                    cause = result.cause,
+                )
             }
         }
     }
@@ -47,11 +52,11 @@ internal sealed interface AssertionStrategy {
          * Throws an [AssertionFailedException] if any failures exist in the assertion [context] tree.
          * The exception message is formatted from the entire tree, showing all passed and failed results.
          */
-        fun throwCollectedFailures(context: AssertionGroup<*>) {
+        fun <T> throwCollectedFailures(context: AssertionGroup<T>) {
             if (!context.failed) return
 
             val message = AssertionFailedMessageFormatter.format(context = context.root)
-            throw AssertionFailedException(message, cause = null)
+            throw AssertionFailedException(message = message, cause = null)
         }
     }
 }

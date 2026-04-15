@@ -8,6 +8,9 @@ internal sealed interface AssertionResult<T> : DescribableNode<T>, Assertion {
     override val root: AssertionGroup<*>
         get() = parent.root
 
+    val cause: Throwable?
+        get() = (status as? Status.Failed)?.cause
+
     val expected: Any?
 
     val status: Status
@@ -26,9 +29,6 @@ internal sealed interface AssertionResult<T> : DescribableNode<T>, Assertion {
 
         override var status: Status = Status.Pending
             private set
-
-        val cause: Throwable?
-            get() = (status as? Status.Failed)?.cause
 
         override fun fail(description: String?, cause: Throwable?) {
             status = Status.Failed(description, null, cause)
