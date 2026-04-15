@@ -26,15 +26,16 @@ internal object AssertionFailedMessageFormatter {
         }
     }
 
-    private fun IndentedStringBuilderScope.format(children: Iterable<AssertionNode<*>>) = children.forEach { node ->
-        with(node) {
-            formatNode()
-            appendLine()
+    private fun IndentedStringBuilderScope.format(children: Iterable<AssertionNode<*>>): Unit =
+        children.forEach { node ->
+            with(node) {
+                formatNode()
+                appendLine()
+            }
         }
-    }
 
     context(context: AssertionNode<*>)
-    private fun IndentedStringBuilderScope.formatNode() =
+    private fun IndentedStringBuilderScope.formatNode(): Unit =
         when (context) {
             is AssertionGroup<*> -> formatAssertionGroup()
             is AssertionResult<*> -> formatAssertionResult()

@@ -1,6 +1,8 @@
 package dev.nmarsman.expect.internal
 
 import dev.nmarsman.expect.api.Assertion
+import dev.nmarsman.expect.api.Assertion.AtomicAssertion
+import dev.nmarsman.expect.internal.AssertionStrategy.Collecting.throwCollectedFailures
 
 internal class AssertionBuilder<T>(
     private val context: AssertionGroup<T>,
@@ -12,9 +14,9 @@ internal class AssertionBuilder<T>(
     override fun assert(
         description: String,
         expected: Any?,
-        assert: Assertion.(T) -> Unit,
+        assert: AtomicAssertion.(T) -> Unit,
     ): Assertion.Builder<T> = also {
-        val result = AssertionResult(
+        val result = AssertionResult.AtomicResult(
             parent = context,
             description = description,
             expected = expected,
@@ -24,6 +26,35 @@ internal class AssertionBuilder<T>(
         }
 
         strategy.evaluate(result)
+    }
+
+    override fun compose(
+        description: String,
+        expected: Any?,
+        assertions: Assertion.Builder<T>.() -> Unit,
+    ): Assertion.ComposedBuilder<T> {
+        val result = AssertionResult.ComposedResult(
+            parent = context,
+            description = description,
+            expected = expected,
+        ).apply {
+            context.append(this)
+        }
+
+        val builder = AssertionBuilder(
+            context = result,
+            strategy = AssertionStrategy.Collecting,
+        ).apply {
+            assertions.invoke(this)
+        }
+
+        return object : Assertion.ComposedBuilder<T> {
+            override fun then(block: Assertion.ComposedAssertion.() -> Unit): Assertion.Builder<T> =
+                this@AssertionBuilder.apply {
+                    block.invoke(builder.context as Assertion.ComposedAssertion)
+                    throwCollectedFailures(context)
+                }
+        }
     }
 
     override fun describedAs(description: String): Assertion.Builder<T> = also {

@@ -17,7 +17,12 @@ val AssertionResultTest by testSuite(
 
     testSuite(name = "Cause") {
         test(name = "Cause returns the throwable when status is Failed with a cause") {
-            val result = AssertionResult(parent = subject.invoke(), description = "description", expected = "expected")
+            val result = AssertionResult.AtomicResult(
+                parent = subject.invoke(),
+                description = "description",
+                expected = "expected",
+            )
+
             val exception = RuntimeException("Some exception")
             result.fail(cause = exception)
 
@@ -26,16 +31,26 @@ val AssertionResultTest by testSuite(
         }
 
         test(name = "Cause returns null when status is Failed without a cause") {
-            val result = AssertionResult(parent = subject.invoke(), description = "description", expected = "expected")
-            result.fail()
+            val result = AssertionResult.AtomicResult(
+                parent = subject.invoke(),
+                description = "description",
+                expected = "expected",
+            ).also {
+                it.fail()
+            }
 
             expectThat(subject = result.cause)
                 .isNull()
         }
 
         test(name = "Cause returns null when status is Passed") {
-            val result = AssertionResult(parent = subject.invoke(), description = "description", expected = "expected")
-            result.pass()
+            val result = AssertionResult.AtomicResult(
+                parent = subject.invoke(),
+                description = "description",
+                expected = "expected",
+            ).also {
+                it.pass()
+            }
 
             expectThat(subject = result.cause)
                 .isNull()
@@ -44,16 +59,26 @@ val AssertionResultTest by testSuite(
 
     testSuite(name = "Failed") {
         test(name = "Failed returns true when status is Failed") {
-            val result = AssertionResult(parent = subject.invoke(), description = "description", expected = "expected")
-            result.fail()
+            val result = AssertionResult.AtomicResult(
+                parent = subject.invoke(),
+                description = "description",
+                expected = "expected",
+            ).also {
+                it.fail()
+            }
 
             expectThat(subject = result.failed)
                 .isEqualTo(expected = true)
         }
 
         test(name = "Failed returns false when status is Passed") {
-            val result = AssertionResult(parent = subject.invoke(), description = "description", expected = "expected")
-            result.pass()
+            val result = AssertionResult.AtomicResult(
+                parent = subject.invoke(),
+                description = "description",
+                expected = "expected",
+            ).also {
+                it.pass()
+            }
 
             expectThat(subject = result.failed)
                 .isEqualTo(expected = false)
@@ -62,24 +87,38 @@ val AssertionResultTest by testSuite(
 
     testSuite(name = "Status") {
         test(name = "Default status is Pending") {
-            val result = AssertionResult(parent = subject.invoke(), description = "description", expected = "expected")
+            val result = AssertionResult.AtomicResult(
+                parent = subject.invoke(),
+                description = "description",
+                expected = "expected",
+            )
 
             expectThat(subject = result.status)
                 .isA<AssertionResult.Status.Pending>()
         }
 
         test(name = "Status is Passed after calling pass") {
-            val result = AssertionResult(parent = subject.invoke(), description = "description", expected = "expected")
-            result.pass(description = "passed")
+            val result = AssertionResult.AtomicResult(
+                parent = subject.invoke(),
+                description = "description",
+                expected = "expected",
+            ).also {
+                it.pass(description = "passed")
+            }
 
             expectThat(subject = result.status)
                 .isA<AssertionResult.Status.Passed>()
         }
 
         test(name = "Status is Failed after calling fail") {
-            val result = AssertionResult(parent = subject.invoke(), description = "description", expected = "expected")
-            result.pass()
-            result.fail(description = "failed")
+            val result = AssertionResult.AtomicResult(
+                parent = subject.invoke(),
+                description = "description",
+                expected = "expected",
+            ).also {
+                it.pass()
+                it.fail(description = "failed")
+            }
 
             expectThat(subject = result.status)
                 .isA<AssertionResult.Status.Failed>()

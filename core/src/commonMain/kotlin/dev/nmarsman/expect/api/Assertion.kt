@@ -19,23 +19,6 @@ interface Assertion {
     fun fail(description: String? = null, cause: Throwable? = null)
 
     /**
-     * Mark the result of the assertion as failed, including an actual value.
-     *
-     * When the [description] contains `{}`, it will be replaced with the formatted representation of [actual].
-     *
-     * @param description A description of the failure. If it contains `{}`, the placeholder will be replaced with
-     *      the formatted representation of [actual].
-     * @param actual The actual value that was encountered. Will be formatted and used to
-     *      replace `{}` in [description], if present.
-     * @param cause An optional Throwable that caused the failure.
-     */
-    fun fail(
-        description: String = "but was: {}",
-        actual: Any?,
-        cause: Throwable? = null,
-    )
-
-    /**
      * Mark the result of the assertion as successful.
      *
      * @param description An optional description of the success. Can provide context about why the assertion passed.
@@ -43,22 +26,79 @@ interface Assertion {
     fun pass(description: String? = null)
 
     /**
-     * Mark the result of the assertion as successful.
-     *
-     * @param description An optional description of the success. Can provide context about why the assertion passed.
-     * @param actual The actual value that was encountered. Will be formatted and used to
-     *      replace `{}` in [description], if present.
+     * An assertion of a single condition, that can be marked as passed or failed with an actual value.
      */
-    fun pass(
-        description: String? = "but was: {}",
-        actual: Any?,
-    )
+    interface AtomicAssertion : Assertion {
+
+        /**
+         * Mark the result of the assertion as failed, including an actual value.
+         *
+         * When the [description] contains `{}`, it will be replaced with the formatted representation of [actual].
+         *
+         * @param description A description of the failure. If it contains `{}`, the placeholder will be replaced with
+         *      the formatted representation of [actual].
+         * @param actual The actual value that was encountered. Will be formatted and used to
+         *      replace `{}` in [description], if present.
+         * @param cause An optional Throwable that caused the failure.
+         */
+        fun fail(
+            description: String = "but was: {}",
+            actual: Any?,
+            cause: Throwable? = null,
+        )
+
+        /**
+         * Mark the result of the assertion as successful.
+         *
+         * @param description An optional description of the success.
+         *      Can provide context about why the assertion passed.
+         * @param actual The actual value that was encountered. Will be formatted and used to
+         *      replace `{}` in [description], if present.
+         */
+        fun pass(
+            description: String? = "but was: {}",
+            actual: Any?,
+        )
+    }
+
+    /**
+     * An assertion composed of multiple conditions whose overall result
+     * is determined by aggregation of those conditions' results.
+     */
+    interface ComposedAssertion : Assertion {
+
+        /**
+         * @property all True if all composed assertions passed, otherwise false.
+         */
+        val all: Boolean
+
+        /**
+         * @property any True if at least one composed assertion passed, otherwise false.
+         */
+        val any: Boolean
+
+        /**
+         * @property none True if all composed assertions failed, otherwise false.
+         */
+        val none: Boolean
+
+        /**
+         * @property failedCount The number of composed assertions that failed.
+         */
+        val failedCount: Int
+
+        /**
+         * @property passedCount The number of composed assertions that passed.
+         */
+        val passedCount: Int
+    }
 
     /**
      * Used to construct assertions.
      *
      * @param T the type of the subject being asserted on.
      */
+    @Suppress("ComplexInterface")
     interface Builder<T> {
         val subject: T
 
@@ -73,7 +113,7 @@ interface Assertion {
          */
         fun assert(
             description: String,
-            assert: Assertion.(T) -> Unit,
+            assert: AtomicAssertion.(T) -> Unit,
         ): Builder<T> = assert(
             description = description,
             expected = null,
@@ -93,7 +133,7 @@ interface Assertion {
         fun assert(
             description: String,
             expected: Any?,
-            assert: Assertion.(T) -> Unit,
+            assert: AtomicAssertion.(T) -> Unit,
         ): Builder<T>
 
         /**
@@ -113,6 +153,34 @@ interface Assertion {
         ) {
             if (assert(it)) pass() else fail()
         }
+
+        /**
+         * Allows an assertion to be composed of multiple assertions.
+         *
+         * @param description A description for the condition the assertion evaluates.
+         * @param assertions A group of assertions that will be evaluated.
+         */
+        fun compose(
+            description: String,
+            assertions: Builder<T>.() -> Unit,
+        ) = compose(
+            description = description,
+            expected = null,
+            assertions = assertions,
+        )
+
+        /**
+         * Allows an assertion to be composed of multiple assertions.
+         *
+         * @param description A description for the condition the assertion evaluates.
+         * @param expected The expected value of the comparison.
+         * @param assertions A group of assertions that will be evaluated.
+         */
+        fun compose(
+            description: String,
+            expected: Any?,
+            assertions: Builder<T>.() -> Unit,
+        ): ComposedBuilder<T>
 
         /**
          * Sets a custom description for the subject of this assertion.
@@ -164,5 +232,27 @@ interface Assertion {
          * @return An assertion builder whose subject is the value returned by [function].
          */
         fun <R> get(description: String? = null, function: T.() -> R): Builder<R>
+    }
+
+    /**
+     * Used to construct composed assertions, which are assertions that consist of multiple conditions.
+     */
+    interface ComposedBuilder<T> {
+
+        /**
+         * Determines the overall result of the composed assertion based on the results of its individual assertions.
+         */
+        infix fun then(block: ComposedAssertion.() -> Unit): Builder<T>
+
+        /**
+         * Determines the overall result of the composed assertion based on the results of its individual assertions.
+         */
+        infix fun require(block: ComposedAssertion.() -> Boolean): Builder<T> =
+            then {
+                when (block.invoke(this)) {
+                    true -> pass()
+                    else -> fail()
+                }
+            }
     }
 }
