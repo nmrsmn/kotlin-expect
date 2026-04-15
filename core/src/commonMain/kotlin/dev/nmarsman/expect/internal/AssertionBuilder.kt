@@ -80,4 +80,27 @@ internal class AssertionBuilder<T>(
             strategy = strategy,
         )
     }
+
+    override fun <R> with(
+        description: String?,
+        function: T.() -> R,
+        assertions: Assertion.Builder<R>.() -> Unit,
+    ): Assertion.Builder<T> {
+        val transformed = function.invoke(context.subject)
+        val subject = AssertionSubject(
+            parent = context,
+            subject = transformed,
+            description = description,
+        )
+
+        AssertionBuilder(
+            context = subject,
+            strategy = AssertionStrategy.Collecting,
+        ).apply {
+            assertions.invoke(this)
+            throwCollectedFailures(context)
+        }
+
+        return this
+    }
 }

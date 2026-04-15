@@ -98,7 +98,6 @@ interface Assertion {
      *
      * @param T the type of the subject being asserted on.
      */
-    @Suppress("ComplexInterface")
     interface Builder<T> {
         val subject: T
 
@@ -232,6 +231,34 @@ interface Assertion {
          * @return An assertion builder whose subject is the value returned by [function].
          */
         fun <R> get(description: String? = null, function: T.() -> R): Builder<R>
+
+        /**
+         * Maps the assertion to the result of the [function].
+         *
+         * @param R The type of the result returned by [function].
+         * @param function A lambda whose receiver is the current assertion.
+         * @param assertions A group of assertions that will be evaluated on the result of [function].
+         */
+        fun <R> with(function: T.() -> R, assertions: Builder<R>.() -> Unit): Builder<T> =
+            with(
+                description = function.describe(),
+                function = function,
+                assertions = assertions,
+            )
+
+        /**
+         * Maps the assertion to the result of the [function].
+         *
+         * @param R The type of the result returned by [function].
+         * @param description The description of the mapped result.
+         * @param function A lambda whose receiver is the current assertion.
+         * @param assertions A group of assertions that will be evaluated on the result of [function].
+         */
+        fun <R> with(
+            description: String? = null,
+            function: T.() -> R,
+            assertions: Builder<R>.() -> Unit,
+        ): Builder<T>
     }
 
     /**
