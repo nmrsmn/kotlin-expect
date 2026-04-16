@@ -163,6 +163,12 @@ expectThat(12)
     .isIn(10..20)
 ```
 
+### Enum assertions
+
+```kotlin
+expectThat(Color.RED)
+    .isIn(Color.RED, Color.GREEN)
+```
 
 ### Chaining assertions
 
