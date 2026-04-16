@@ -146,6 +146,24 @@ expectThat("Hello World")
     .matchesIgnoringCase(Regex("hello world"))
 ```
 
+### Comparable assertions
+
+```kotlin
+expectThat(2026)
+    .isGreaterThan(2025)
+
+expectThat(3.14)
+    .isLessThan(4.0)
+
+expectThat(12L)
+    .isGreaterThanOrEqualTo(12L)
+    .isLessThanOrEqualTo(12L)
+
+expectThat(12)
+    .isIn(10..20)
+```
+
+
 ### Chaining assertions
 
 Assertions return the builder, so you can chain multiple checks on the same subject:
