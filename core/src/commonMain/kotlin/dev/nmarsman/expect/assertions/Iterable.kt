@@ -118,6 +118,7 @@ fun <T : Iterable<E>, E> Assertion.Builder<T>.containsExactly(vararg elements: E
  * Whenever the subject has no guaranteed iteration order (like [Set]) this assertion is probably
  * not appropriate and you should [containsExactlyInAnyOrder] instead.
  */
+@Suppress("CognitiveComplexMethod")
 fun <T : Iterable<E>, E> Assertion.Builder<T>.containsExactly(elements: Collection<E>): Assertion.Builder<T> =
     compose(
         description = "contains exactly the elements {}",
@@ -127,32 +128,30 @@ fun <T : Iterable<E>, E> Assertion.Builder<T>.containsExactly(elements: Collecti
         val remaining = subject.toMutableList()
 
         elements.forEachIndexed { index, element ->
-            assert(
-                description = "contains {}",
-                expected = element,
+            compose(
+                description = "…at index {}",
+                expected = index,
             ) {
-                if (remaining.remove(element)) {
-                    pass()
-
-                    assert(
-                        description = "…at index $index",
-                        expected = element,
-                    ) {
+                assert(
+                    description = "contains {}",
+                    expected = element,
+                ) {
+                    if (remaining.remove(element)) {
                         when {
                             index !in original.indices ->
-                                fail(description = "index $index is out of range")
+                                fail()
 
-                            original[index] == element ->
+                            original[index] === element ->
                                 pass()
 
                             else ->
                                 fail(actual = original[index])
                         }
+                    } else {
+                        fail()
                     }
-                } else {
-                    fail()
                 }
-            }
+            } require { all }
         }
 
         assert(
