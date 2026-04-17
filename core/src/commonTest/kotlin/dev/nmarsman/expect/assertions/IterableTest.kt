@@ -40,7 +40,6 @@ val IterableAssertionTest by testSuite(
     }
 
     testSuite(name = "`doesNotContain` assertions") {
-
         test(name = "Passes if the subject does not contain the expected element") {
             expectThat(listOf("item1", "item2"))
                 .doesNotContain("item3")
@@ -69,6 +68,88 @@ val IterableAssertionTest by testSuite(
             expectThrows<AssertionFailedException> {
                 expectThat(listOf("item1", "item2"))
                     .doesNotContain("item3", "item1")
+            }
+        }
+    }
+
+    testSuite(name = "`containsExactly` assertions") {
+        test(name = "Fails if the expected elements are empty") {
+            expectThrows<AssertionFailedException> {
+                expectThat(listOf("item1", "item2"))
+                    .containsExactly()
+            }
+        }
+
+        test(name = "Passes if the subject contains all the expected element - in order") {
+            expectThat(listOf("item1", "item2"))
+                .containsExactly("item1", "item2")
+        }
+
+        test(name = "Fails if the subject contains all the expected element - not in order") {
+            expectThrows<AssertionFailedException> {
+                expectThat(listOf("item1", "item2"))
+                    .containsExactly("item2", "item1")
+            }
+        }
+
+        test(name = "Fails if the subject contains more elements than the expected elements") {
+            expectThrows<AssertionFailedException> {
+                expectThat(listOf("item1", "item2", "item3"))
+                    .containsExactly("item1", "item2")
+            }
+        }
+
+        test(name = "Fails if the subject contains less elements than the expected elements") {
+            expectThrows<AssertionFailedException> {
+                expectThat(listOf("item1", "item2"))
+                    .containsExactly("item1", "item2", "item3")
+            }
+        }
+
+        test(name = "Fails if the subject does not contain all of the the expected elements") {
+            expectThrows<AssertionFailedException> {
+                expectThat(listOf("item1", "item2"))
+                    .containsExactly("item3", "item1")
+            }
+        }
+    }
+
+    testSuite(name = "`containsExactlyInAnyOrder` assertions") {
+        test(name = "Fails if the expected elements are empty") {
+            expectThrows<AssertionFailedException> {
+                expectThat(setOf("item1", "item2"))
+                    .containsExactlyInAnyOrder()
+            }
+        }
+
+        test(name = "Passes if the subject contains all the expected element - in order") {
+            expectThat(setOf("item1", "item2"))
+                .containsExactlyInAnyOrder("item1", "item2")
+        }
+
+        test(name = "Passes if the subject contains all the expected element - not in order") {
+            expectThat(setOf("item1", "item2"))
+                .containsExactlyInAnyOrder("item2", "item1")
+        }
+
+        test(name = "Fails if the subject contains more elements than the expected elements") {
+            expectThrows<AssertionFailedException> {
+                expectThat(setOf("item1", "item2", "item3"))
+                    .containsExactlyInAnyOrder("item1", "item2")
+            }
+        }
+
+        test(name = "Fails if the subject contains less elements than the expected elements") {
+            expectThrows<AssertionFailedException> {
+                expectThat(setOf("item1", "item2"))
+                    .containsExactlyInAnyOrder("item1", "item2", "item3")
+            }
+        }
+
+        test(name = "Fails if the subject does not contain all of the the expected elements") {
+            expectThrows<AssertionFailedException> {
+                expectThat(setOf("item1", "item2"))
+                    .containsExactlyInAnyOrder("item3", "item1")
             }
         }
     }
