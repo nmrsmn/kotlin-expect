@@ -9,7 +9,7 @@ val IterableAssertionTest by testSuite(
     displayName = "Iterable assertion tests",
 ) {
     testSuite(name = "`contains` assertions") {
-        test(name = "Passes if the subject contains the expected elements are empty") {
+        test(name = "Passes if the expected elements are empty") {
             expectThat(listOf("item1", "item2"))
                 .contains()
         }
@@ -35,6 +35,40 @@ val IterableAssertionTest by testSuite(
             expectThrows<AssertionFailedException> {
                 expectThat(listOf("item1", "item2"))
                     .contains("item3", "item1")
+            }
+        }
+    }
+
+    testSuite(name = "`doesNotContain` assertions") {
+
+        test(name = "Passes if the subject does not contain the expected element") {
+            expectThat(listOf("item1", "item2"))
+                .doesNotContain("item3")
+        }
+
+        test(name = "Passes if the subject does not contain multiple expected elements") {
+            expectThat(listOf("item1", "item2", "item3"))
+                .doesNotContain("item4", "item5")
+        }
+
+        test(name = "Fails if the the expected elements are empty") {
+            expectThrows<IllegalArgumentException> {
+                expectThat(listOf("item1", "item2"))
+                    .doesNotContain()
+            }.hasMessage("You must supply some expected elements.")
+        }
+
+        test(name = "Fails if the subject contains the expected element") {
+            expectThrows<AssertionFailedException> {
+                expectThat(listOf("item1", "item2"))
+                    .doesNotContain("item1")
+            }
+        }
+
+        test(name = "Fails if the subject contains one of the the expected elements") {
+            expectThrows<AssertionFailedException> {
+                expectThat(listOf("item1", "item2"))
+                    .doesNotContain("item3", "item1")
             }
         }
     }

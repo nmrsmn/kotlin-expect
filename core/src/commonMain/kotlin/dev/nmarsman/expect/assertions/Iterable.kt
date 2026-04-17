@@ -46,3 +46,43 @@ fun <T : Iterable<E>, E> Assertion.Builder<T>.contains(elements: Collection<E>):
                 }
             } require { all }
     }
+
+fun <T : Iterable<E>, E> Assertion.Builder<T>.doesNotContain(vararg elements: E): Assertion.Builder<T> =
+    doesNotContain(elements.toList())
+
+fun <T : Iterable<E>, E> Assertion.Builder<T>.doesNotContain(elements: Collection<E>): Assertion.Builder<T> =
+    when {
+        elements.isEmpty() ->
+            throw IllegalArgumentException("You must supply some expected elements.")
+
+        elements.size == 1 ->
+            assert(
+                description = "does not contain {}",
+                expected = elements,
+            ) {
+                if (subject.contains(elements.first())) {
+                    fail()
+                } else {
+                    pass()
+                }
+            }
+
+        else ->
+            compose(
+                description = "does not contain any of the elements {}",
+                expected = elements,
+            ) {
+                elements.forEach { element ->
+                    assert(
+                        description = "does not contain {}",
+                        expected = element,
+                    ) {
+                        if (subject.contains(element)) {
+                            fail()
+                        } else {
+                            pass()
+                        }
+                    }
+                }
+            } require { all }
+    }

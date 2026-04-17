@@ -48,4 +48,45 @@ val IterableFailureFormattingTest by testSuite(
             )
         }
     }
+
+    testSuite(name = "`doesNotContain` failure formatting") {
+        test(name = "Containing the only checked element when the subject has one element") {
+            expectThrows<AssertionFailedException> {
+                expectThat(listOf("item1"))
+                    .doesNotContain("item1")
+            }.hasMessage(
+                """
+                    |▼ Expect that ["item1"]:
+                    |   ✗ does not contain ["item1"]
+                """.trimMargin(),
+            )
+        }
+
+        test(name = "Containing the only checked element when the subject has multiple elements") {
+            expectThrows<AssertionFailedException> {
+                expectThat(listOf("item1", "item2"))
+                    .doesNotContain("item2")
+            }.hasMessage(
+                """
+                    |▼ Expect that ["item1", "item2"]:
+                    |   ✗ does not contain ["item2"]
+                """.trimMargin(),
+            )
+        }
+
+        test(name = "Containing one of the checked elements when the subject has multiple elements") {
+            expectThrows<AssertionFailedException> {
+                expectThat(listOf("item1", "item2"))
+                    .doesNotContain("item3", "item1")
+            }.hasMessage(
+                """
+                    |▼ Expect that ["item1", "item2"]:
+                    |   ✗ does not contain any of the elements ["item3", "item1"]:
+                    |      ✓ does not contain "item3"
+                    |
+                    |      ✗ does not contain "item1"
+                """.trimMargin(),
+            )
+        }
+    }
 }
