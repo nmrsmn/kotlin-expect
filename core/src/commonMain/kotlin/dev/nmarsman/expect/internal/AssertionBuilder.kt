@@ -52,7 +52,9 @@ internal class AssertionBuilder<T>(
             override fun then(block: Assertion.ComposedAssertion.() -> Unit): Assertion.Builder<T> =
                 this@AssertionBuilder.apply {
                     block.invoke(builder.context as Assertion.ComposedAssertion)
-                    throwCollectedFailures(context)
+                    if (strategy is AssertionStrategy.Throwing) {
+                        throwCollectedFailures(context)
+                    }
                 }
         }
     }
