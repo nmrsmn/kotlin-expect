@@ -17,7 +17,7 @@ internal class AssertionSubject<T>(
     override var description: String? = null,
 ) : AssertionGroup<T>, DescribableNode<T> {
     private val appendedChildren = mutableListOf<AssertionNode<*>>()
-    override val children: Iterable<AssertionNode<*>> = appendedChildren
+    override val children: Collection<AssertionNode<*>> = appendedChildren
 
     override val root: AssertionGroup<*>
         // Suppressed to void generating unreachable extra branch for code coverage
