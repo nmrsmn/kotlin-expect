@@ -138,7 +138,7 @@ fun <T : Iterable<E>, E> Assertion.Builder<T>.containsExactly(elements: Collecti
                 ) {
                     if (remaining.remove(element)) {
                         when {
-                            index !in original.indices ->
+                            index >= original.size ->
                                 fail()
 
                             original[index] === element ->

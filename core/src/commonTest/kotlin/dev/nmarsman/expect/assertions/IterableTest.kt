@@ -101,8 +101,8 @@ val IterableAssertionTest by testSuite(
 
         test(name = "Fails if the subject contains less elements than the expected elements") {
             expectThrows<AssertionFailedException> {
-                expectThat(listOf("item1", "item2"))
-                    .containsExactly("item1", "item2", "item3")
+                expectThat(listOf("item1"))
+                    .containsExactly("item2", "item1")
             }
         }
 
