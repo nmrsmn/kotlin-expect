@@ -1,0 +1,41 @@
+package dev.nmarsman.expect.assertions
+
+import de.infix.testBalloon.framework.core.testSuite
+import dev.nmarsman.expect.api.expectThat
+import dev.nmarsman.expect.api.expectThrows
+import dev.nmarsman.expect.exception.AssertionFailedException
+
+val IterableAssertionTest by testSuite(
+    displayName = "Iterable assertion tests",
+) {
+    testSuite(name = "`contains` assertions") {
+        test(name = "Passes if the subject contains the expected elements are empty") {
+            expectThat(listOf("item1", "item2"))
+                .contains()
+        }
+
+        test(name = "Passes if the subject contains the expected element") {
+            expectThat(listOf("item1", "item2"))
+                .contains("item1")
+        }
+
+        test(name = "Passes if the subject contains multiple expected elements") {
+            expectThat(listOf("item1", "item2", "item3"))
+                .contains("item1", "item2")
+        }
+
+        test(name = "Fails if the subject does not contain the expected element") {
+            expectThrows<AssertionFailedException> {
+                expectThat(listOf("item1", "item2"))
+                    .contains("item3")
+            }
+        }
+
+        test(name = "Fails if the subject does not contain one of the the expected elements") {
+            expectThrows<AssertionFailedException> {
+                expectThat(listOf("item1", "item2"))
+                    .contains("item3", "item1")
+            }
+        }
+    }
+}
