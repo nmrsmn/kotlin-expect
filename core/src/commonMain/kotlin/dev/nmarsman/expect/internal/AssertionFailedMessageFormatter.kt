@@ -98,10 +98,10 @@ internal object AssertionFailedMessageFormatter {
                     oldValue = "{0}",
                     newValue = formatValue(subject.first).toString(),
                 )
-                .replace(
-                    oldValue = "{1}",
-                    newValue = formatValue(subject.second).toString(),
-                )
+                    .replace(
+                        oldValue = "{1}",
+                        newValue = formatValue(subject.second).toString(),
+                    )
 
             contains("{}") ->
                 replace(

@@ -1,6 +1,7 @@
 package dev.nmarsman.expect.assertions
 
 import dev.nmarsman.expect.api.Assertion
+import dev.nmarsman.expect.internal.AssertionFailedMessageFormatter.formatValue
 
 /**
  * Asserts that all of the [elements] are present in the subject.
@@ -208,3 +209,32 @@ fun <T : Iterable<E>, E> Assertion.Builder<T>.containsExactlyInAnyOrder(elements
             }
         }
     } require { all }
+
+/**
+ * Asserts that the subject iterable is sorted according to the Comparator.
+ */
+fun <T : Iterable<E>, E> Assertion.Builder<T>.isSorted(comparator: Comparator<E>): Assertion.Builder<T> =
+    assert(
+        description = "is sorted",
+    ) {
+        val violation = subject
+            .zipWithNext()
+            .firstOrNull { (first, second) ->
+                comparator.compare(first, second) > 0
+            }
+
+        if (violation == null) {
+            pass()
+        } else {
+            fail(
+                actual = violation,
+                description = "but {0} is greater than {1}",
+            )
+        }
+    }
+
+/**
+ * Asserts that the subject iterable is sorted according to natural order.
+ */
+fun <T : Iterable<E>, E : Comparable<E>> Assertion.Builder<T>.isSorted(): Assertion.Builder<T> =
+    isSorted(comparator = naturalOrder())

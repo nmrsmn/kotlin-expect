@@ -153,4 +153,45 @@ val IterableAssertionTest by testSuite(
             }
         }
     }
+
+    testSuite(name = "`isSorted` assertions") {
+        test(name = "Passes if the subject is empty") {
+            expectThat(emptyList<Int>())
+                .isSorted()
+        }
+
+        test(name = "Passes if the subject has a single element") {
+            expectThat(listOf(1))
+                .isSorted()
+        }
+
+        test(name = "Passes if the subject is sorted in ascending order") {
+            expectThat(listOf(1, 2, 3, 4, 5))
+                .isSorted()
+        }
+
+        test(name = "Passes if the subject is sorted in descending order") {
+            expectThat(listOf(5, 4, 3, 2, 1))
+                .isSorted(compareByDescending { it })
+        }
+
+        test(name = "Passes if the subject contains equal adjacent elements") {
+            expectThat(listOf(1, 1, 2, 2, 3))
+                .isSorted()
+        }
+
+        test(name = "Fails if the subject is not sorted") {
+            expectThrows<AssertionFailedException> {
+                expectThat(listOf(1, 3, 2, 4))
+                    .isSorted()
+            }
+        }
+
+        test(name = "Fails if the subject is sorted in the opposite order") {
+            expectThrows<AssertionFailedException> {
+                expectThat(listOf(5, 4, 3, 2, 1))
+                    .isSorted()
+            }
+        }
+    }
 }

@@ -193,4 +193,102 @@ val IterableFailureFormattingTest by testSuite(
             )
         }
     }
+
+    testSuite(name = "`isSorted` failure formatting") {
+        test(name = "Subject has a single pair of unsorted elements") {
+            expectThrows<AssertionFailedException> {
+                expectThat(listOf(1, 3, 2, 4))
+                    .isSorted()
+            }.hasMessage(
+                """
+                    |▼ Expect that [1, 3, 2, 4]:
+                    |   ✗ is sorted
+                    |     but 3 is greater than 2
+                """.trimMargin(),
+            )
+        }
+
+        test(name = "Subject has multiple pairs of unsorted elements") {
+            expectThrows<AssertionFailedException> {
+                expectThat(listOf(3, 1, 4, 2))
+                    .isSorted()
+            }.hasMessage(
+                """
+                    |▼ Expect that [3, 1, 4, 2]:
+                    |   ✗ is sorted
+                    |     but 3 is greater than 1
+                """.trimMargin(),
+            )
+        }
+
+        test(name = "Subject is sorted in the opposite order") {
+            expectThrows<AssertionFailedException> {
+                expectThat(listOf(5, 4, 3, 2, 1))
+                    .isSorted()
+            }.hasMessage(
+                """
+                    |▼ Expect that [5, 4, 3, 2, 1]:
+                    |   ✗ is sorted
+                    |     but 5 is greater than 4
+                """.trimMargin(),
+            )
+        }
+
+        test(name = "Subject with strings is not sorted") {
+            expectThrows<AssertionFailedException> {
+                expectThat(listOf("banana", "apple", "cherry"))
+                    .isSorted()
+            }.hasMessage(
+                """
+                    |▼ Expect that ["banana", "apple", "cherry"]:
+                    |   ✗ is sorted
+                    |     but "banana" is greater than "apple"
+                """.trimMargin(),
+            )
+        }
+    }
+
+    testSuite(name = "Pair formatting in failure descriptions") {
+        test(name = "Pair actual with only {1} placeholder in description") {
+            expectThrows<AssertionFailedException> {
+                expectThat(listOf(3, 1))
+                    .assert(
+                        description = "is valid",
+                        expected = null,
+                    ) {
+                        fail(
+                            actual = Pair("a", "b"),
+                            description = "second was {1}",
+                        )
+                    }
+            }.hasMessage(
+                """
+                    |▼ Expect that [3, 1]:
+                    |   ✗ is valid
+                    |     second was "b"
+                """.trimMargin(),
+            )
+        }
+
+        test(name = "Pair actual with neither {0} nor {1} placeholder in description") {
+            expectThrows<AssertionFailedException> {
+                expectThat(listOf(3, 1))
+                    .assert(
+                        description = "is valid",
+                        expected = null,
+                    ) {
+                        fail(
+                            actual = Pair("a", "b"),
+                            description = "but was: {}",
+                        )
+                    }
+            }.hasMessage(
+                """
+                    |▼ Expect that [3, 1]:
+                    |   ✗ is valid
+                    |     but was: ("a", "b")
+                """.trimMargin(),
+            )
+        }
+    }
 }
