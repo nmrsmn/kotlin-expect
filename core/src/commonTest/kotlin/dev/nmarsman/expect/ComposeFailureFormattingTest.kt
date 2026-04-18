@@ -49,7 +49,6 @@ val ComposeFailureFormattingTest by testSuite(
                     |      ▼ value of the property name ("John"):
                     |         ✓ is equal to "John"
                     |
-                    |
                     |      ▼ value of the property age (10):
                     |         ✗ is equal to 100
                 """.trimMargin(),

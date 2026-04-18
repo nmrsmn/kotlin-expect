@@ -22,15 +22,18 @@ internal object AssertionFailedMessageFormatter {
         appendLine(context.describe())
 
         withIndent {
-            format(children = context.children)
+            format(children = context.children.toList())
         }
     }
 
-    private fun IndentedStringBuilderScope.format(children: Iterable<AssertionNode<*>>): Unit =
-        children.forEach { node ->
+    private fun IndentedStringBuilderScope.format(children: List<AssertionNode<*>>): Unit =
+        children.forEachIndexed { index, node ->
             with(node) {
                 formatNode()
-                appendLine()
+
+                if (index < children.lastIndex) {
+                    appendLine()
+                }
             }
         }
 

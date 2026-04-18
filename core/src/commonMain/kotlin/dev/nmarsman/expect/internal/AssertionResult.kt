@@ -59,7 +59,7 @@ internal sealed interface AssertionResult<T> : DescribableNode<T>, Assertion {
             private set
 
         private val appendedChildren = mutableListOf<AssertionNode<*>>()
-        override val children: Iterable<AssertionNode<*>> = appendedChildren
+        override val children: Collection<AssertionNode<*>> = appendedChildren
 
         private val results: List<AssertionResult<*>>
             get() = collectResults(children)
