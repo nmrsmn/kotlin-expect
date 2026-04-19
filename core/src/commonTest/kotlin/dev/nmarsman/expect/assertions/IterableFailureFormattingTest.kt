@@ -1,13 +1,138 @@
 package dev.nmarsman.expect.assertions
 
 import de.infix.testBalloon.framework.core.testSuite
+import dev.nmarsman.expect.api.Assertion
 import dev.nmarsman.expect.api.expectThat
 import dev.nmarsman.expect.api.expectThrows
 import dev.nmarsman.expect.exception.AssertionFailedException
 
+private fun Assertion.Builder<Int>.isOdd() =
+    assertThat("is odd") { subject % 2 == 1 }
+
 val IterableFailureFormattingTest by testSuite(
     displayName = "Iterable failure formatting tests",
 ) {
+    testSuite(name = "`all` failure formatting") {
+        test(name = "One element does not match the predicate") {
+            expectThrows<AssertionFailedException> {
+                expectThat(listOf(1, 2, 3))
+                    .all {
+                        isOdd()
+                    }
+            }.hasMessage(
+                """
+                    |▼ Expect that [1, 2, 3]:
+                    |   ✗ all elements match:
+                    |      ▼ 1:
+                    |         ✓ is odd
+                    |
+                    |      ▼ 2:
+                    |         ✗ is odd
+                    |
+                    |      ▼ 3:
+                    |         ✓ is odd
+                """.trimMargin(),
+            )
+        }
+
+        test(name = "No elements match the predicate") {
+            expectThrows<AssertionFailedException> {
+                expectThat(listOf(2, 4))
+                    .all {
+                        isOdd()
+                    }
+            }.hasMessage(
+                """
+                    |▼ Expect that [2, 4]:
+                    |   ✗ all elements match:
+                    |      ▼ 2:
+                    |         ✗ is odd
+                    |
+                    |      ▼ 4:
+                    |         ✗ is odd
+                """.trimMargin(),
+            )
+        }
+    }
+
+    testSuite(name = "`any` failure formatting") {
+        test(name = "No elements match the predicate") {
+            expectThrows<AssertionFailedException> {
+                expectThat(listOf(2, 4))
+                    .any {
+                        isOdd()
+                    }
+            }.hasMessage(
+                """
+                    |▼ Expect that [2, 4]:
+                    |   ✗ at least one element matches:
+                    |      ▼ 2:
+                    |         ✗ is odd
+                    |
+                    |      ▼ 4:
+                    |         ✗ is odd
+                """.trimMargin(),
+            )
+        }
+
+        test(name = "Empty subject") {
+            expectThrows<AssertionFailedException> {
+                expectThat(emptyList<Int>())
+                    .any {
+                        isOdd()
+                    }
+            }.hasMessage(
+                """
+                    |▼ Expect that []:
+                    |   ✗ at least one element matches:
+                """.trimMargin(),
+            )
+        }
+    }
+
+    testSuite(name = "`none` failure formatting") {
+        test(name = "One element matches the predicate") {
+            expectThrows<AssertionFailedException> {
+                expectThat(listOf(2, 3, 4))
+                    .none {
+                        isOdd()
+                    }
+            }.hasMessage(
+                """
+                    |▼ Expect that [2, 3, 4]:
+                    |   ✗ none of the elements match:
+                    |      ▼ 2:
+                    |         ✗ is odd
+                    |
+                    |      ▼ 3:
+                    |         ✓ is odd
+                    |
+                    |      ▼ 4:
+                    |         ✗ is odd
+                """.trimMargin(),
+            )
+        }
+
+        test(name = "All elements match the predicate") {
+            expectThrows<AssertionFailedException> {
+                expectThat(listOf(1, 3))
+                    .none {
+                        isOdd()
+                    }
+            }.hasMessage(
+                """
+                    |▼ Expect that [1, 3]:
+                    |   ✗ none of the elements match:
+                    |      ▼ 1:
+                    |         ✓ is odd
+                    |
+                    |      ▼ 3:
+                    |         ✓ is odd
+                """.trimMargin(),
+            )
+        }
+    }
+
     testSuite(name = "`contains` failure formatting") {
         test(name = "Missing the only checked element when the subject has one element") {
             expectThrows<AssertionFailedException> {

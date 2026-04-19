@@ -1,7 +1,53 @@
+@file:Suppress("TooManyFunctions")
+
 package dev.nmarsman.expect.assertions
 
 import dev.nmarsman.expect.api.Assertion
-import dev.nmarsman.expect.internal.AssertionFailedMessageFormatter.formatValue
+
+/**
+ * Asserts that all elements of the subject pass the assertions in [predicate].
+ */
+fun <T : Iterable<E>, E> Assertion.Builder<T>.all(predicate: Assertion.Builder<E>.() -> Unit): Assertion.Builder<T> =
+    compose(
+        description = "all elements match",
+    ) {
+        subject.forEach { element ->
+            get(
+                description = "{}",
+                function = { element },
+            ).apply(predicate)
+        }
+    } require { all }
+
+/**
+ * Asserts that at least one element of the subject pass the assertions in [predicate].
+ */
+fun <T : Iterable<E>, E> Assertion.Builder<T>.any(predicate: Assertion.Builder<E>.() -> Unit): Assertion.Builder<T> =
+    compose(
+        description = "at least one element matches",
+    ) {
+        subject.forEach { element ->
+            get(
+                description = "{}",
+                function = { element },
+            ).apply(predicate)
+        }
+    } require { any }
+
+/**
+ * Asserts that no elements of the subject pass the assertions in [predicate].
+ */
+fun <T : Iterable<E>, E> Assertion.Builder<T>.none(predicate: Assertion.Builder<E>.() -> Unit): Assertion.Builder<T> =
+    compose(
+        description = "none of the elements match",
+    ) {
+        subject.forEach { element ->
+            get(
+                description = "{}",
+                function = { element },
+            ).apply(predicate)
+        }
+    } require { none }
 
 /**
  * Asserts that all of the [elements] are present in the subject.

@@ -1,13 +1,119 @@
 package dev.nmarsman.expect.assertions
 
 import de.infix.testBalloon.framework.core.testSuite
+import dev.nmarsman.expect.api.Assertion
 import dev.nmarsman.expect.api.expectThat
 import dev.nmarsman.expect.api.expectThrows
 import dev.nmarsman.expect.exception.AssertionFailedException
 
+private fun Assertion.Builder<Int>.isEven() =
+    assertThat("is even") { subject % 2 == 0 }
+
 val IterableAssertionTest by testSuite(
     displayName = "Iterable assertion tests",
 ) {
+    testSuite(name = "`all` predicate assertions") {
+        test(name = "Passes if all elements match the predicate") {
+            expectThat(listOf(2, 4, 6))
+                .all {
+                    isEven()
+                }
+        }
+
+        test(name = "Passes if the subject is empty") {
+            expectThat(emptyList<Int>())
+                .all {
+                    isEven()
+                }
+        }
+
+        test(name = "Fails if one element does not match the predicate") {
+            expectThrows<AssertionFailedException> {
+                expectThat(listOf(2, 3, 4))
+                    .all {
+                        isEven()
+                    }
+            }
+        }
+
+        test(name = "Fails if no elements match the predicate") {
+            expectThrows<AssertionFailedException> {
+                expectThat(listOf(1, 3, 5))
+                    .all {
+                        isEven()
+                    }
+            }
+        }
+    }
+
+    testSuite(name = "`any` predicate assertions") {
+        test(name = "Passes if at least one element matches the predicate") {
+            expectThat(listOf(1, 2, 3))
+                .any {
+                    isEven()
+                }
+        }
+
+        test(name = "Passes if all elements match the predicate") {
+            expectThat(listOf(2, 4, 6))
+                .any {
+                    isEven()
+                }
+        }
+
+        test(name = "Fails if the subject is empty") {
+            expectThrows<AssertionFailedException> {
+                expectThat(emptyList<Int>())
+                    .any {
+                        isEven()
+                    }
+            }
+        }
+
+        test(name = "Fails if no elements match the predicate") {
+            expectThrows<AssertionFailedException> {
+                expectThat(listOf(1, 3, 5))
+                    .any {
+                        isEven()
+                    }
+            }
+        }
+    }
+
+    testSuite(name = "`none` predicate assertions") {
+        test(name = "Passes if no elements match the predicate") {
+            expectThat(listOf(1, 3, 5))
+                .none {
+                    isEven()
+                }
+        }
+
+        test(name = "Passes if the subject is empty") {
+            expectThat(emptyList<Int>())
+                .none {
+                    isEven()
+                }
+        }
+
+        test(name = "Fails if one element matches the predicate") {
+            expectThrows<AssertionFailedException> {
+                expectThat(listOf(1, 2, 3))
+                    .none {
+                        isEven()
+                    }
+            }
+        }
+
+        test(name = "Fails if all elements match the predicate") {
+            expectThrows<AssertionFailedException> {
+                expectThat(listOf(2, 4, 6))
+                    .none {
+                        isEven()
+                    }
+            }
+        }
+    }
+
     testSuite(name = "`contains` assertions") {
         test(name = "Passes if the expected elements are empty") {
             expectThat(listOf("item1", "item2"))
