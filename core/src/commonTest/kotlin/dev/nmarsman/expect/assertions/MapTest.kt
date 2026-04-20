@@ -112,4 +112,18 @@ val MapAssertionTest by testSuite(
             }
         }
     }
+
+    testSuite(name = "`hasEntry` assertions") {
+        test(name = "Passes if the subject contains the specified entry") {
+            expectThat(mapOf(1 to "item1", 2 to "item2"))
+                .hasEntry(1 to "item1")
+        }
+
+        test(name = "Fails if the subject does not contain the specified entry") {
+            expectThrows<AssertionFailedException> {
+                expectThat(mapOf(1 to "item1", 2 to "item2"))
+                    .hasEntry(1, "item2")
+            }
+        }
+    }
 }

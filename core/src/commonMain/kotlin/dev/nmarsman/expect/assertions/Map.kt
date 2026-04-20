@@ -1,6 +1,20 @@
 package dev.nmarsman.expect.assertions
 
 import dev.nmarsman.expect.api.Assertion
+import dev.nmarsman.expect.internal.AssertionFailedMessageFormatter.formatValue
+
+/**
+ * Maps the assertion to an assertion on the entry value indexed by [key].
+ *
+ * @return An assertion on the value indexed by [key] or `null`
+ *      if no such entry exists in the subject map.
+ */
+operator fun <T : Map<K, V>, K, V> Assertion.Builder<T>.get(key: K): Assertion.Builder<V?> =
+    get(
+        description = "entry [${formatValue(key)}]",
+    ) {
+        this[key]
+    }
 
 /**
  * Assert that the subject map is empty.
@@ -85,3 +99,20 @@ fun <T : Map<K, V>, K, V> Assertion.Builder<T>.doesNotContainKeys(vararg keys: K
             doesNotContainKey(key)
         }
     } require { all }
+
+/**
+ * Asserts that the subject map contains an entry with the specified [key],
+ * with a value equal to [value].
+ */
+fun <T : Map<K, V>, K, V> Assertion.Builder<T>.hasEntry(key: K, value: V): Assertion.Builder<T> =
+    hasEntry(key to value)
+
+/**
+ * Asserts that the subject map contains an entry with the specified [entry].key,
+ * with a value equal to [entry].value.
+ */
+fun <T : Map<K, V>, K, V> Assertion.Builder<T>.hasEntry(entry: Pair<K, V>): Assertion.Builder<T> =
+    apply {
+        containsKey(entry.first)[entry.first]
+            .isEqualTo(entry.second)
+    }

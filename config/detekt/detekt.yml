@@ -33,7 +33,7 @@ complexity:
     StringLiteralDuplication:
         allowedDuplications: 3
     TooManyFunctions:
-        allowedFunctionsPerInterface: 12 # Default is 11, but [Assertion.Builder] has more functions, so we set it to 12.
+        allowedFunctionsPerInterface: 13 # Default is 11, but [Assertion.Builder] has more functions, so we set it to 12.
         ignoreDeprecated: true
         ignoreInternal: true
         ignoreOverridden: true

@@ -103,4 +103,31 @@ val MapFailureFormattingTest by testSuite(
             """.trimMargin(),
         )
     }
+
+    test(name = "Formats the failure message of `hasEntry` assertion correctly - missing key") {
+        expectThrows<AssertionFailedException> {
+            expectThat(mapOf(3 to "item"))
+                .hasEntry(1 to "something")
+        }.hasMessage(
+            """
+                |▼ Expect that {3="item"}:
+                |   ✗ has an entry with the key 1
+            """.trimMargin(),
+        )
+    }
+
+    test(name = "Formats the failure message of `hasEntry` assertion correctly - wrong value") {
+        expectThrows<AssertionFailedException> {
+            expectThat(mapOf(3 to "item"))
+                .hasEntry(3 to "something")
+        }.hasMessage(
+            """
+                |▼ Expect that {3="item"}:
+                |   ✓ has an entry with the key 3
+                |
+                |   ▼ entry [3]:
+                |      ✗ is equal to "something"
+            """.trimMargin(),
+        )
+    }
 }
