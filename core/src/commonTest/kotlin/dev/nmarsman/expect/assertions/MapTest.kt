@@ -64,6 +64,20 @@ val MapAssertionTest by testSuite(
         }
     }
 
+    testSuite(name = "`doesNotContainKey` assertions") {
+        test(name = "Passes if the subject does not contain the specified key") {
+            expectThat(mapOf(1 to "item"))
+                .doesNotContainKey(2)
+        }
+
+        test(name = "Fails if the subject contains the specified key") {
+            expectThrows<AssertionFailedException> {
+                expectThat(mapOf(1 to "item"))
+                    .doesNotContainKey(1)
+            }
+        }
+    }
+
     testSuite(name = "`containsKeys` assertions") {
         test(name = "Passes if the subject contains all specified keys") {
             expectThat(mapOf(1 to "item1", 2 to "item2"))

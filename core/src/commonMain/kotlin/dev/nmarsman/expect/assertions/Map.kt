@@ -35,7 +35,7 @@ fun <T : Map<K, V>, K, V> Assertion.Builder<T>.hasSize(expected: Int): Assertion
     }
 
 /**
- * Asserts that hte subject map contains an entry with the specified [key].
+ * Asserts that the subject map contains an entry with the specified [key].
  * Depending on the map implementation the value associated with [key] may be `null`.
  * This assertion just tests for the existence of the key.
  */
@@ -48,7 +48,20 @@ fun <T : Map<K, V>, K, V> Assertion.Builder<T>.containsKey(key: K): Assertion.Bu
     }
 
 /**
- * Asserts that hte subject map contains entries with the specified [keys].
+ * Asserts that the subject map does not contain an entry with the specified [key].
+ * Depending on the map implementation the value associated with [key] may be `null`.
+ * This assertion just tests for the nonexistence of the key.
+ */
+fun <T : Map<K, V>, K, V> Assertion.Builder<T>.doesNotContainKey(key: K): Assertion.Builder<T> =
+    assertThat(
+        description = "does not have an entry with the key {}",
+        expected = key,
+    ) {
+        !it.containsKey(key)
+    }
+
+/**
+ * Asserts that the subject map contains entries with the specified [keys].
  */
 fun <T : Map<K, V>, K, V> Assertion.Builder<T>.containsKeys(vararg keys: K): Assertion.Builder<T> =
     compose(
