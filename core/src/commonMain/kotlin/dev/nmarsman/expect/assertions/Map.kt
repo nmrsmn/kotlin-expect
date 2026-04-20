@@ -72,3 +72,16 @@ fun <T : Map<K, V>, K, V> Assertion.Builder<T>.containsKeys(vararg keys: K): Ass
             containsKey(key)
         }
     } require { all }
+
+/**
+ * Asserts that the subject map doesn't contain entries with the specified [keys].
+ */
+fun <T : Map<K, V>, K, V> Assertion.Builder<T>.doesNotContainKeys(vararg keys: K): Assertion.Builder<T> =
+    compose(
+        description = "doesn't have entries with the keys {}",
+        expected = keys.toList(),
+    ) {
+        keys.forEach { key ->
+            doesNotContainKey(key)
+        }
+    } require { all }
