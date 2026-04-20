@@ -46,3 +46,16 @@ fun <T : Map<K, V>, K, V> Assertion.Builder<T>.containsKey(key: K): Assertion.Bu
     ) {
         it.containsKey(key)
     }
+
+/**
+ * Asserts that hte subject map contains entries with the specified [keys].
+ */
+fun <T : Map<K, V>, K, V> Assertion.Builder<T>.containsKeys(vararg keys: K): Assertion.Builder<T> =
+    compose(
+        description = "has entries with the keys {}",
+        expected = keys.toList(),
+    ) {
+        keys.forEach { key ->
+            containsKey(key)
+        }
+    } require { all }

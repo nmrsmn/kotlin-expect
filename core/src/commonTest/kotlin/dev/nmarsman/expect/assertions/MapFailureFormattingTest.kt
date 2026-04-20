@@ -57,4 +57,21 @@ val MapFailureFormattingTest by testSuite(
             """.trimMargin(),
         )
     }
+
+    test(name = "Formats the failure message of `containsKeys` assertion correctly") {
+        expectThrows<AssertionFailedException> {
+            expectThat(mapOf(3 to "item"))
+                .containsKeys(1, 2, 3)
+        }.hasMessage(
+            """
+                |▼ Expect that {3="item"}:
+                |   ✗ has entries with the keys [1, 2, 3]:
+                |      ✗ has an entry with the key 1
+                |
+                |      ✗ has an entry with the key 2
+                |
+                |      ✓ has an entry with the key 3
+            """.trimMargin(),
+        )
+    }
 }
