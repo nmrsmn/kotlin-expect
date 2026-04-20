@@ -92,11 +92,22 @@ internal object AssertionFailedMessageFormatter {
         }.toString()
 
     private fun <T> String.replaceWith(subject: T) =
-        when (contains("{}")) {
-            true -> replace(
-                oldValue = "{}",
-                newValue = formatValue(subject).toString(),
-            )
+        when {
+            subject is Pair<*, *> && (contains("{0}") || contains("{1}")) ->
+                replace(
+                    oldValue = "{0}",
+                    newValue = formatValue(subject.first).toString(),
+                )
+                    .replace(
+                        oldValue = "{1}",
+                        newValue = formatValue(subject.second).toString(),
+                    )
+
+            contains("{}") ->
+                replace(
+                    oldValue = "{}",
+                    newValue = formatValue(subject).toString(),
+                )
 
             else -> this
         }

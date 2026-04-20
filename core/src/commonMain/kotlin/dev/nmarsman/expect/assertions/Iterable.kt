@@ -1,6 +1,53 @@
+@file:Suppress("TooManyFunctions")
+
 package dev.nmarsman.expect.assertions
 
 import dev.nmarsman.expect.api.Assertion
+
+/**
+ * Asserts that all elements of the subject pass the assertions in [predicate].
+ */
+fun <T : Iterable<E>, E> Assertion.Builder<T>.all(predicate: Assertion.Builder<E>.() -> Unit): Assertion.Builder<T> =
+    compose(
+        description = "all elements match",
+    ) {
+        subject.forEach { element ->
+            get(
+                description = "{}",
+                function = { element },
+            ).apply(predicate)
+        }
+    } require { all }
+
+/**
+ * Asserts that at least one element of the subject pass the assertions in [predicate].
+ */
+fun <T : Iterable<E>, E> Assertion.Builder<T>.any(predicate: Assertion.Builder<E>.() -> Unit): Assertion.Builder<T> =
+    compose(
+        description = "at least one element matches",
+    ) {
+        subject.forEach { element ->
+            get(
+                description = "{}",
+                function = { element },
+            ).apply(predicate)
+        }
+    } require { any }
+
+/**
+ * Asserts that no elements of the subject pass the assertions in [predicate].
+ */
+fun <T : Iterable<E>, E> Assertion.Builder<T>.none(predicate: Assertion.Builder<E>.() -> Unit): Assertion.Builder<T> =
+    compose(
+        description = "none of the elements match",
+    ) {
+        subject.forEach { element ->
+            get(
+                description = "{}",
+                function = { element },
+            ).apply(predicate)
+        }
+    } require { none }
 
 /**
  * Asserts that all of the [elements] are present in the subject.
@@ -208,3 +255,32 @@ fun <T : Iterable<E>, E> Assertion.Builder<T>.containsExactlyInAnyOrder(elements
             }
         }
     } require { all }
+
+/**
+ * Asserts that the subject iterable is sorted according to the Comparator.
+ */
+fun <T : Iterable<E>, E> Assertion.Builder<T>.isSorted(comparator: Comparator<E>): Assertion.Builder<T> =
+    assert(
+        description = "is sorted",
+    ) {
+        val violation = subject
+            .zipWithNext()
+            .firstOrNull { (first, second) ->
+                comparator.compare(first, second) > 0
+            }
+
+        if (violation == null) {
+            pass()
+        } else {
+            fail(
+                actual = violation,
+                description = "but {0} is greater than {1}",
+            )
+        }
+    }
+
+/**
+ * Asserts that the subject iterable is sorted according to natural order.
+ */
+fun <T : Iterable<E>, E : Comparable<E>> Assertion.Builder<T>.isSorted(): Assertion.Builder<T> =
+    isSorted(comparator = naturalOrder())
