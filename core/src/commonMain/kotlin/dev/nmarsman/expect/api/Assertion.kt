@@ -147,8 +147,29 @@ interface Assertion {
         fun assertThat(
             description: String,
             assert: (T) -> Boolean,
+        ): Builder<T> = assertThat(
+            description = description,
+            expected = null,
+            assert = assert,
+        )
+
+        /**
+         * Evaluates a boolean condition.
+         * This is a helper method for implementing simple type of assertions.
+         *
+         * @param description A description for the condition of the assertion.
+         * @param expected The expected value of the comparison.
+         * @param assert A function that returns true, if the assertion passes.
+         *      false, if the assertion fails.
+         * @return The chained assertion builder.
+         */
+        fun assertThat(
+            description: String,
+            expected: Any?,
+            assert: (T) -> Boolean,
         ): Builder<T> = assert(
             description = description,
+            expected = expected,
         ) {
             if (assert(it)) pass() else fail()
         }

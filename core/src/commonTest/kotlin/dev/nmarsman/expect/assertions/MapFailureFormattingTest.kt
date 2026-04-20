@@ -45,4 +45,16 @@ val MapFailureFormattingTest by testSuite(
             """.trimMargin(),
         )
     }
+
+    test(name = "Formats the failure message of `containsKey` assertion correctly") {
+        expectThrows<AssertionFailedException> {
+            expectThat(emptyMap<Int, String>())
+                .containsKey(1)
+        }.hasMessage(
+            """
+                |▼ Expect that {}:
+                |   ✗ has an entry with the key 1
+            """.trimMargin(),
+        )
+    }
 }

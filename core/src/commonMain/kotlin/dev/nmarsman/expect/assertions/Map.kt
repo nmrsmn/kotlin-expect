@@ -33,3 +33,16 @@ fun <T : Map<K, V>, K, V> Assertion.Builder<T>.hasSize(expected: Int): Assertion
             else -> fail(actual = it.size)
         }
     }
+
+/**
+ * Asserts that hte subject map contains an entry with the specified [key].
+ * Depending on the map implementation the value associated with [key] may be `null`.
+ * This assertion just tests for the existence of the key.
+ */
+fun <T : Map<K, V>, K, V> Assertion.Builder<T>.containsKey(key: K): Assertion.Builder<T> =
+    assertThat(
+        description = "has an entry with the key {}",
+        expected = key,
+    ) {
+        it.containsKey(key)
+    }
