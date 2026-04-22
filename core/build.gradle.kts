@@ -4,6 +4,9 @@ plugins {
     alias(libs.plugins.test.balloon) apply true
 }
 
+group = "dev.nmarsman.expect"
+version = libs.versions.kotlin.expect.get()
+
 kotlin {
     jvm()
 

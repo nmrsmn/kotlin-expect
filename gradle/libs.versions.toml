@@ -1,4 +1,6 @@
 [versions]
+kotlin-expect = "0.1-SNAPSHOT"
+
 detekt = "2.0.0-alpha.2"
 jvm-toolchain = "21"
 kotlin = "2.3.20"
