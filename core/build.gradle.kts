@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.kotlin.multiplatform) apply true
+    alias(libs.plugins.dokka) apply true
     alias(libs.plugins.maven.publish) apply true
     alias(libs.plugins.nmarsman.detekt) apply true
     alias(libs.plugins.test.balloon) apply true
