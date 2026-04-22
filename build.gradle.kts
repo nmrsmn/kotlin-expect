@@ -5,6 +5,8 @@ import kotlinx.kover.gradle.plugin.dsl.GroupingEntityType
 plugins {
     alias(libs.plugins.kotlin.kover) apply true
     alias(libs.plugins.kotlin.multiplatform) apply false
+    alias(libs.plugins.dokka) apply false
+    alias(libs.plugins.maven.publish) apply false
     alias(libs.plugins.nmarsman.detekt) apply false
     alias(libs.plugins.test.balloon) apply false
     base
