@@ -1,10 +1,14 @@
-name: Kotlin Expect - build on merge to main
+name: Kotlin Expect - Build on merge to main
 
 on:
     pull_request:
         types: [closed]
         branches: [main]
     workflow_dispatch:
+
+concurrency:
+    group: ${{ github.workflow }}
+    cancel-in-progress: true
 
 jobs:
     publish:
