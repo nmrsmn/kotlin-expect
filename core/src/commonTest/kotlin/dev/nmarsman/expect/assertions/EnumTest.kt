@@ -28,4 +28,20 @@ val EnumAssertionTest by testSuite(
             }
         }
     }
+
+    testSuite(name = "`name` mapper function") {
+        test(name = "Passes if the mapped (name) subject is equal to") {
+            expectThat(Direction.NORTH)
+                .name()
+                .isEqualTo("NORTH")
+        }
+    }
+
+    testSuite(name = "`ordinal` mapper function") {
+        test(name = "Passes if the mapped (ordinal) subject is equal to") {
+            expectThat(Direction.NORTH)
+                .ordinal()
+                .isEqualTo(0)
+        }
+    }
 }

@@ -169,6 +169,14 @@ expectThat(12)
 ```kotlin
 expectThat(Color.RED)
     .isIn(Color.RED, Color.GREEN)
+
+expectThat(Color.RED)
+    .name()
+    .isEqualTo("RED")
+
+expectThat(Color.RED)
+    .ordinal()
+    .isEqualTo(1)
 ```
 
 ### Collection assertions
