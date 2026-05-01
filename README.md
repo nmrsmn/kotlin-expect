@@ -127,6 +127,7 @@ expectThat("")
     .isEmpty()
 
 expectThat("hello")
+    .trim()
     .isNotEmpty()
     .isNotBlank()
     .hasLength(5)
