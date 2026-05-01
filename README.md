@@ -171,6 +171,15 @@ expectThat(Color.RED)
     .isIn(Color.RED, Color.GREEN)
 ```
 
+### Collection assertions
+
+```kotlin
+expectThat(listOf(1, 2, 3))
+    .hasSize(3)
+    .size()
+    .isGreaterThan(2)
+```
+
 ### Chaining assertions
 
 Assertions return the builder, so you can chain multiple checks on the same subject:

@@ -329,7 +329,7 @@ val CharSequenceTest by testSuite(
         }
     }
 
-    testSuite(name = "`trim` helper function") {
+    testSuite(name = "`trim` mapper function") {
         test(name = "Passes when the trimmed subject is equal - String") {
             expectThat("subject ")
                 .trim()

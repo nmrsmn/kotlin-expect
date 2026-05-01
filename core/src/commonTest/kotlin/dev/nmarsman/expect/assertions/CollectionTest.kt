@@ -49,4 +49,12 @@ val CollectionAssertionTest by testSuite(
             }
         }
     }
+
+    testSuite(name = "`size` mapping function") {
+        test(name = "Passes if the mapped subject is equal") {
+            expectThat(listOf("item"))
+                .size()
+                .isEqualTo(1)
+        }
+    }
 }
