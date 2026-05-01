@@ -126,4 +126,20 @@ val MapAssertionTest by testSuite(
             }
         }
     }
+
+    testSuite(name = "`keys` mapper function") {
+        test(name = "Passes if the mapped (keys) subject is equal to") {
+            expectThat(mapOf(1 to "item1", 2 to "item2"))
+                .keys()
+                .isEqualTo(setOf(1, 2))
+        }
+    }
+
+    testSuite(name = "`values` mapper function") {
+        test(name = "Passes if the mapped (values) subject is equal to") {
+            expectThat(mapOf(1 to "item1", 2 to "item2"))
+                .values()
+                .containsExactly("item1", "item2")
+        }
+    }
 }

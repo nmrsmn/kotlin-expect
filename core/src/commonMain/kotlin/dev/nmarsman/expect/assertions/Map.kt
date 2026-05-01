@@ -1,3 +1,5 @@
+@file:Suppress("TooManyFunctions")
+
 package dev.nmarsman.expect.assertions
 
 import dev.nmarsman.expect.api.Assertion
@@ -116,3 +118,15 @@ fun <T : Map<K, V>, K, V> Assertion.Builder<T>.hasEntry(entry: Pair<K, V>): Asse
         containsKey(entry.first)[entry.first]
             .isEqualTo(entry.second)
     }
+
+/**
+ * Maps an assertion on a map to an assertion on its keys.
+ */
+fun <T : Map<K, *>, K> Assertion.Builder<T>.keys(): Assertion.Builder<Set<K>> =
+    get(Map<K, *>::keys)
+
+/**
+ * Maps an assertion on a map to an assertion on its values.
+ */
+fun <T : Map<*, V>, V> Assertion.Builder<T>.values(): Assertion.Builder<Collection<V>> =
+    get(Map<*, V>::values)
