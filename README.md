@@ -164,6 +164,16 @@ expectThat(12)
     .isIn(10..20)
 ```
 
+### Chaining assertions
+
+Assertions return the builder, so you can chain multiple checks on the same subject:
+
+```kotlin
+expectThat("hello")
+    .isA<String>()
+    .isEqualTo("hello")
+```
+
 ### Enum assertions
 
 ```kotlin
@@ -188,14 +198,13 @@ expectThat(listOf(1, 2, 3))
     .isGreaterThan(2)
 ```
 
-### Chaining assertions
-
-Assertions return the builder, so you can chain multiple checks on the same subject:
+### Map assertions
 
 ```kotlin
-expectThat("hello")
-    .isA<String>()
-    .isEqualTo("hello")
+expectThat(mapOf(1 to "item1", 2 to "item2"))
+    .isNotEmpty()
+    .hasSize(3)
+    .containsKeys(1, 2)
 ```
 
 ## Contributing
