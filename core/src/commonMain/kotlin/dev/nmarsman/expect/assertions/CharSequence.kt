@@ -3,6 +3,7 @@
 package dev.nmarsman.expect.assertions
 
 import dev.nmarsman.expect.api.Assertion
+import kotlin.jvm.JvmName
 
 fun <T : CharSequence?> Assertion.Builder<T>.isNullOrEmpty(): Assertion.Builder<T> =
     assertThat(description = "is null or empty") {
@@ -157,3 +158,16 @@ fun <T : CharSequence> Assertion.Builder<T>.containsIgnoringCase(expected: CharS
             else -> fail()
         }
     }
+
+/**
+ * Trims the CharSequence subject of whitespace.
+ */
+fun <T : CharSequence> Assertion.Builder<T>.trim(): Assertion.Builder<CharSequence> =
+    get(CharSequence::trim)
+
+/**
+ * Trims the String subject of whitespace.
+ */
+@JvmName("trimString")
+fun Assertion.Builder<String>.trim(): Assertion.Builder<String> =
+    get(String::trim)

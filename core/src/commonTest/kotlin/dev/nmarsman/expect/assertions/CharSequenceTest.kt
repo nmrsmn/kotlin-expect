@@ -328,4 +328,18 @@ val CharSequenceTest by testSuite(
             }
         }
     }
+
+    testSuite(name = "`trim` helper function") {
+        test(name = "Passes when the trimmed subject is equal - String") {
+            expectThat("subject ")
+                .trim()
+                .isEqualTo("subject")
+        }
+
+        test(name = "Passes when the trimmed subject is equal - CharSequence") {
+            expectThat("subject " as CharSequence)
+                .trim()
+                .isEqualTo("subject")
+        }
+    }
 }
