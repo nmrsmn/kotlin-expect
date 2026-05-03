@@ -15,8 +15,8 @@ A Kotlin Multiplatform assertion/expection library designed to provide expressiv
 ## Requirements
 
 - **JDK**: 21+
-- **Gradle**: 9.4.1 (included via wrapper)
-- **Kotlin**: 2.3.20
+- **Gradle**: 9.5.0 (included via wrapper)
+- **Kotlin**: 2.3.21
 
 ## Getting Started
 
@@ -231,6 +231,10 @@ expectThat(mapOf(1 to "item1", 2 to "item2"))
     .hasSize(3)
     .containsKeys(1, 2)
 ```
+
+## Inspiration
+
+This library was inspired by [Strikt](https://strikt.io/), an assertion library for Kotlin. As Strikt seemingly became stale, Kotlin Expect was created as a modern Kotlin Multiplatform alternative. The project structure and API design are influenced by Strikt's approach to expressive, chainable assertions.
 
 ## Contributing
 
