@@ -196,6 +196,18 @@ expectThat(listOf(1, 2, 3))
     .hasSize(3)
     .size()
     .isGreaterThan(2)
+
+expectThat(listOf(1))
+    .single()
+    .isEqualTo(1)
+
+expectThat(listOf(1, 2, 3))
+    .first()
+    .isEqualTo(1)
+
+expectThat(listOf(1, 2, 3))
+    .last()
+    .isEqualTo(3)
 ```
 
 ### Map assertions

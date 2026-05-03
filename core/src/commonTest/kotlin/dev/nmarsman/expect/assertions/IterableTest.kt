@@ -300,4 +300,66 @@ val IterableAssertionTest by testSuite(
             }
         }
     }
+
+    testSuite(name = "`first` mapper function") {
+        test(name = "Passes if the mapped (first) subject is equal to") {
+            expectThat(listOf("item1", "item2", "item3"))
+                .first()
+                .isEqualTo("item1")
+        }
+
+        test(name = "Fails if the subject is empty") {
+            expectThrows<NoSuchElementException> {
+                expectThat(emptyList<Int>())
+                    .first()
+            }
+        }
+    }
+
+    testSuite(name = "`last` mapper function") {
+        test(name = "Passes if the mapped (last) subject is equal to") {
+            expectThat(listOf("item1", "item2", "item3"))
+                .last()
+                .isEqualTo("item3")
+        }
+
+        test(name = "Fails if the subject is empty") {
+            expectThrows<NoSuchElementException> {
+                expectThat(emptyList<Int>())
+                    .last()
+            }
+        }
+    }
+
+    testSuite(name = "`single` mapper function") {
+        test(name = "Passes if the mapped (single) subject is equal to") {
+            expectThat(listOf("item1"))
+                .single()
+                .isEqualTo("item1")
+        }
+
+        test(name = "Fails if the subject is empty") {
+            expectThrows<AssertionFailedException> {
+                expectThat(emptyList<Int>())
+                    .single()
+            }.hasMessage(
+                """
+                    |▼ Expect that []:
+                    |   ✗ has only one element
+                """.trimMargin(),
+            )
+        }
+
+        test(name = "Fails if the subject has multiple elements") {
+            expectThrows<AssertionFailedException> {
+                expectThat(listOf("item1", "item2", "item3"))
+                    .single()
+            }.hasMessage(
+                """
+                    |▼ Expect that ["item1", "item2", "item3"]:
+                    |   ✗ has only one element
+                """.trimMargin(),
+            )
+        }
+    }
 }
