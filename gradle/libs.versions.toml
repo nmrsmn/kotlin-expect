@@ -1,5 +1,5 @@
 [versions]
-kotlin-expect = "0.1-SNAPSHOT"
+kotlin-expect = "0.1"
 
 detekt = "2.0.0-alpha.3"
 dokka = "2.2.0"
