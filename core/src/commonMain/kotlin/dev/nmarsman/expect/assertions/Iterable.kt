@@ -284,3 +284,74 @@ fun <T : Iterable<E>, E> Assertion.Builder<T>.isSorted(comparator: Comparator<E>
  */
 fun <T : Iterable<E>, E : Comparable<E>> Assertion.Builder<T>.isSorted(): Assertion.Builder<T> =
     isSorted(comparator = naturalOrder())
+
+/**
+ * Maps an assertion on an iterable to an assertion on the first element of the subject iterable.
+ */
+fun <T : Iterable<E>, E> Assertion.Builder<T>.first(): Assertion.Builder<E> =
+    get(
+        description = "first element",
+    ) {
+        first()
+    }
+
+/**
+ * Maps an assertion on an iterable to an assertion on the last element of the subject iterable.
+ */
+fun <T : Iterable<E>, E> Assertion.Builder<T>.last(): Assertion.Builder<E> =
+    get(
+        description = "last element",
+    ) {
+        last()
+    }
+
+/**
+ * Maps an assertion on an iterable to an assertion on the number of elements in the subject iterable.
+ */
+fun <T : Iterable<*>> Assertion.Builder<T>.count(): Assertion.Builder<Int> =
+    get(Iterable<*>::count)
+
+/**
+ * Maps an assertion on a collection to an assertion on the single element of the subject collection.
+ * Whenever the subject collection does not contain exactly one element this assertion fails.
+ */
+fun <T : Collection<E>, E> Assertion.Builder<T>.single(): Assertion.Builder<E> =
+    assert(
+        description = "has only one element",
+    ) {
+        if (it.size == 1) {
+            pass()
+        } else {
+            fail()
+        }
+    }
+        .get(
+            description = "single element {}",
+            function = { single() },
+        )
+
+/**
+ * Maps an assertion on an iterable to an assertion on a list of all elements of the subject that match `predicate`.
+ */
+fun <T : Iterable<E>, E> Assertion.Builder<T>.filter(predicate: (E) -> Boolean): Assertion.Builder<Collection<E>> =
+    get {
+        filter(predicate)
+    }
+
+/**
+ * Maps an assertion on an iterable to an assertion over a flattened list of the results of
+ * [transform] for each element in the subject iterable.
+ */
+fun <T : Iterable<E>, E, R> Assertion.Builder<T>.flatMap(transform: (E) -> Iterable<R>): Assertion.Builder<List<R>> =
+    get {
+        flatMap(transform)
+    }
+
+/**
+ * Maps an assertion on an iterable to an assertion on a list of the results of
+ * [function] for each element in the subject iterable.
+ */
+fun <T : Iterable<E>, E, R> Assertion.Builder<T>.map(function: (E) -> R): Assertion.Builder<Collection<R>> =
+    get {
+        map(function)
+    }

@@ -300,4 +300,90 @@ val IterableAssertionTest by testSuite(
             }
         }
     }
+
+    testSuite(name = "`first` mapper function") {
+        test(name = "Passes if the mapped (first) subject is equal to") {
+            expectThat(listOf("item1", "item2", "item3"))
+                .first()
+                .isEqualTo("item1")
+        }
+
+        test(name = "Fails if the subject is empty") {
+            expectThrows<NoSuchElementException> {
+                expectThat(emptyList<Int>())
+                    .first()
+            }
+        }
+    }
+
+    testSuite(name = "`last` mapper function") {
+        test(name = "Passes if the mapped (last) subject is equal to") {
+            expectThat(listOf("item1", "item2", "item3"))
+                .last()
+                .isEqualTo("item3")
+        }
+
+        test(name = "Fails if the subject is empty") {
+            expectThrows<NoSuchElementException> {
+                expectThat(emptyList<Int>())
+                    .last()
+            }
+        }
+    }
+
+    testSuite(name = "`single` mapper function") {
+        test(name = "Passes if the mapped (single) subject is equal to") {
+            expectThat(listOf("item1"))
+                .single()
+                .isEqualTo("item1")
+        }
+
+        test(name = "Fails if the subject is empty") {
+            expectThrows<AssertionFailedException> {
+                expectThat(emptyList<Int>())
+                    .single()
+            }.hasMessage(
+                """
+                    |▼ Expect that []:
+                    |   ✗ has only one element
+                """.trimMargin(),
+            )
+        }
+
+        test(name = "Fails if the subject has multiple elements") {
+            expectThrows<AssertionFailedException> {
+                expectThat(listOf("item1", "item2", "item3"))
+                    .single()
+            }.hasMessage(
+                """
+                    |▼ Expect that ["item1", "item2", "item3"]:
+                    |   ✗ has only one element
+                """.trimMargin(),
+            )
+        }
+    }
+
+    testSuite(name = "`filter` mapper function") {
+        test(name = "Passes if the mapped (filter) subject is equal to") {
+            expectThat(listOf("item1", "item2", "item3"))
+                .filter { it == "item1" }
+                .hasSize(1)
+        }
+    }
+
+    testSuite(name = "`flatMap` mapper function") {
+        test(name = "Passes if the mapped (flatMap) subject is equal to") {
+            expectThat(listOf("item1", "item2", "item3"))
+                .flatMap { it.toCharArray().toList() }
+                .contains('1', '2', '3')
+        }
+    }
+
+    testSuite(name = "`map` mapper function") {
+        test(name = "Passes if the mapped (map) subject is equal to") {
+            expectThat(listOf("item1", "item3", "item2"))
+                .map { it.last() }
+                .containsExactlyInAnyOrder('1', '2', '3')
+        }
+    }
 }

@@ -196,6 +196,31 @@ expectThat(listOf(1, 2, 3))
     .hasSize(3)
     .size()
     .isGreaterThan(2)
+
+expectThat(listOf(1))
+    .single()
+    .isEqualTo(1)
+
+expectThat(listOf(1, 2, 3))
+    .first()
+    .isEqualTo(1)
+
+expectThat(listOf(1, 2, 3))
+    .last()
+    .isEqualTo(3)
+
+expectThat(listOf(1, 2, 3))
+    .filter { it > 1 }
+    .hasSize(2)
+
+expectThat(listOf("item1", "item2", "item3"))
+    .flatMap { it.toCharArray().toList() }
+    .filter { it.isDigit() }
+    .containsExactly('1', '2', '3')
+
+expectThat(listOf(1, 2, 3))
+    .map { it * 2 }
+    .containsExactly(2, 4, 6)
 ```
 
 ### Map assertions
