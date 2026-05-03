@@ -44,6 +44,7 @@ mavenPublishing {
     pom {
         name.set("Kotlin Expect")
         description.set("A Kotlin library for writing fluent and descriptive assertions, with a focus test readability.")
+        url.set("https://github.com/nmrsmn/kotlin-expect")
         inceptionYear.set("2026")
 
         developers {
