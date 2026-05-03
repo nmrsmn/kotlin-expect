@@ -362,4 +362,28 @@ val IterableAssertionTest by testSuite(
             )
         }
     }
+
+    testSuite(name = "`filter` mapper function") {
+        test(name = "Passes if the mapped (filter) subject is equal to") {
+            expectThat(listOf("item1", "item2", "item3"))
+                .filter { it == "item1" }
+                .hasSize(1)
+        }
+    }
+
+    testSuite(name = "`flatMap` mapper function") {
+        test(name = "Passes if the mapped (flatMap) subject is equal to") {
+            expectThat(listOf("item1", "item2", "item3"))
+                .flatMap { it.toCharArray().toList() }
+                .contains('1', '2', '3')
+        }
+    }
+
+    testSuite(name = "`map` mapper function") {
+        test(name = "Passes if the mapped (map) subject is equal to") {
+            expectThat(listOf("item1", "item3", "item2"))
+                .map { it.last() }
+                .containsExactlyInAnyOrder('1', '2', '3')
+        }
+    }
 }

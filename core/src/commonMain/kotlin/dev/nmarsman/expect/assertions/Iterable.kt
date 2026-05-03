@@ -329,3 +329,29 @@ fun <T : Collection<E>, E> Assertion.Builder<T>.single(): Assertion.Builder<E> =
             description = "single element {}",
             function = { single() },
         )
+
+/**
+ * Maps an assertion on an iterable to an assertion on a list of all elements of the subject that match `predicate`.
+ */
+fun <T : Iterable<E>, E> Assertion.Builder<T>.filter(predicate: (E) -> Boolean): Assertion.Builder<Collection<E>> =
+    get {
+        filter(predicate)
+    }
+
+/**
+ * Maps an assertion on an iterable to an assertion over a flattened list of the results of
+ * [transform] for each element in the subject iterable.
+ */
+fun <T : Iterable<E>, E, R> Assertion.Builder<T>.flatMap(transform: (E) -> Iterable<R>): Assertion.Builder<List<R>> =
+    get {
+        flatMap(transform)
+    }
+
+/**
+ * Maps an assertion on an iterable to an assertion on a list of the results of
+ * [function] for each element in the subject iterable.
+ */
+fun <T : Iterable<E>, E, R> Assertion.Builder<T>.map(function: (E) -> R): Assertion.Builder<Collection<R>> =
+    get {
+        map(function)
+    }
