@@ -9,7 +9,7 @@ import dev.nmarsman.expect.exception.AssertionFailedException
 import dev.nmarsman.expect.helper.Person
 
 val ComposeFailureFormattingTest by testSuite(
-    displayName = "Composed assertion failure formatting tests",
+    name = "Composed assertion failure formatting tests",
 ) {
     test(name = "`compose` assertion failure is formatted correctly on a simple node") {
         expectThrows<AssertionFailedException> {

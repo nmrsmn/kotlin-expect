@@ -5,7 +5,7 @@ import dev.nmarsman.expect.api.expectThat
 import dev.nmarsman.expect.api.expectThrows
 
 val CharSequenceFailureFormattingTest by testSuite(
-    displayName = "Char sequence failure formatting tests",
+    name = "Char sequence failure formatting tests",
 ) {
     test(name = "`isNullOrEmpty` assertion failure is formatted correctly") {
         expectThrows<AssertionError> {

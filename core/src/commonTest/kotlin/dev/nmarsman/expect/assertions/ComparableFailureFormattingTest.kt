@@ -6,7 +6,7 @@ import dev.nmarsman.expect.api.expectThrows
 import dev.nmarsman.expect.exception.AssertionFailedException
 
 val ComparableFailureFormattingTest by testSuite(
-    displayName = "Comparable failure formatting tests",
+    name = "Comparable failure formatting tests",
 ) {
     test(name = "Formats the failure message of `isGreaterThan` assertion correctly") {
         expectThrows<AssertionFailedException> {

@@ -6,7 +6,7 @@ import dev.nmarsman.expect.exception.AssertionFailedException
 import dev.nmarsman.expect.helper.Person
 import kotlin.test.DefaultAsserter.fail
 
-val AnyEqualityTest by testSuite(displayName = "Equality tests") {
+val AnyEqualityTest by testSuite(name = "Equality tests") {
     testSuite(name = "Null equality") {
         test(name = "Null equality check should pass if the subject is null and the expected value is null") {
             expectThat(subject = null)

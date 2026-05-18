@@ -6,7 +6,7 @@ import dev.nmarsman.expect.api.expectThrows
 import dev.nmarsman.expect.exception.AssertionFailedException
 
 val MapAssertionTest by testSuite(
-    displayName = "Map assertion tests",
+    name = "Map assertion tests",
 ) {
     testSuite(name = "`hasSize` assertions") {
         test(name = "Passes if the subject has the expected size") {

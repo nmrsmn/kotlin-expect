@@ -12,7 +12,7 @@ import dev.nmarsman.expect.helper.Person
 import dev.nmarsman.expect.internal.AssertionBuilder
 
 val TransformTests by testSuite(
-    displayName = "Transform tests",
+    name = "Transform tests",
 ) {
     testSuite(name = "Transform using `get`") {
         test(name = "Transforming on a property should pass when comparing the transformed value") {
