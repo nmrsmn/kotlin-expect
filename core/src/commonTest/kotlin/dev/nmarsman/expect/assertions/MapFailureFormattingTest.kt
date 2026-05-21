@@ -7,7 +7,7 @@ import dev.nmarsman.expect.exception.AssertionFailedException
 import kotlin.getValue
 
 val MapFailureFormattingTest by testSuite(
-    displayName = "Map failure formatting tests",
+    name = "Map failure formatting tests",
 ) {
     test(name = "Formats the failure message of `hasSize` assertion correctly") {
         expectThrows<AssertionFailedException> {

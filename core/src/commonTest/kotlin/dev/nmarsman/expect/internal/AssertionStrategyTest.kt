@@ -6,7 +6,7 @@ import dev.nmarsman.expect.exception.AssertionFailedException
 import dev.nmarsman.expect.internal.AssertionStrategy.Collecting.throwCollectedFailures
 
 val AssertionStrategyTest by testSuite(
-    displayName = "Assertion strategy tests",
+    name = "Assertion strategy tests",
 ) {
     testSuite(name = "Throwing strategy") {
         test(name = "Should not throw when assertion passed") {

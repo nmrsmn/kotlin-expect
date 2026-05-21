@@ -5,7 +5,7 @@ import dev.nmarsman.expect.api.expectThat
 import dev.nmarsman.expect.assertions.isEqualTo
 
 val AssertionSubjectTest by testSuite(
-    displayName = "Assertion subject tests",
+    name = "Assertion subject tests",
 ) {
     test(name = "Assertion subject without parent should be flagged as root") {
         val subject = AssertionSubject(parent = null, subject = 42)

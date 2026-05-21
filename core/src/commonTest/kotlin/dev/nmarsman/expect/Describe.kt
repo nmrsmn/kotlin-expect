@@ -8,7 +8,7 @@ import dev.nmarsman.expect.internal.AssertionResult
 import dev.nmarsman.expect.internal.AssertionSubject
 
 val DescribeAssertionNodeTest by testSuite(
-    displayName = "Describe assertion node tests",
+    name = "Describe assertion node tests",
 ) {
     testSuite(
         name = "Describe assertion subject",

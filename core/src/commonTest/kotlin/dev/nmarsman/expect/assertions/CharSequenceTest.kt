@@ -5,7 +5,7 @@ import dev.nmarsman.expect.api.expectThat
 import dev.nmarsman.expect.api.expectThrows
 
 val CharSequenceTest by testSuite(
-    displayName = "Char sequence assertion tests",
+    name = "Char sequence assertion tests",
 ) {
     testSuite(name = "`isNullOrEmpty` assertion") {
         test(name = "Passes when the subject is `null`") {

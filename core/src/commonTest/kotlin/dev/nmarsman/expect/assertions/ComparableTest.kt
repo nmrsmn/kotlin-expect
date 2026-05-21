@@ -8,7 +8,7 @@ import dev.nmarsman.expect.helper.Person
 import kotlin.test.DefaultAsserter.fail
 
 val ComparableAssertionTest by testSuite(
-    displayName = "Comparable assertion tests",
+    name = "Comparable assertion tests",
 ) {
     testSuite(name = "`isGreaterThan` assertions") {
         test(name = "Passes if the subject is greater than the expected value") {

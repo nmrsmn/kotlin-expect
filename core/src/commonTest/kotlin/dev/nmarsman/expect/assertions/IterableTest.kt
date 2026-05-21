@@ -10,7 +10,7 @@ private fun Assertion.Builder<Int>.isEven() =
     assertThat("is even") { subject % 2 == 0 }
 
 val IterableAssertionTest by testSuite(
-    displayName = "Iterable assertion tests",
+    name = "Iterable assertion tests",
 ) {
     testSuite(name = "`all` predicate assertions") {
         test(name = "Passes if all elements match the predicate") {

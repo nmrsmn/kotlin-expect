@@ -13,7 +13,7 @@ private enum class Direction {
 }
 
 val EnumAssertionTest by testSuite(
-    displayName = "Enum assertion tests",
+    name = "Enum assertion tests",
 ) {
     testSuite(name = "`isOneOf` assertions") {
         test(name = "Passes if the subject is one of the expected values") {

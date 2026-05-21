@@ -7,7 +7,7 @@ import dev.nmarsman.expect.assertions.isEqualTo
 import dev.nmarsman.expect.helper.Person
 
 val TransformFailureFormattingTest by testSuite(
-    displayName = "Transform failure formatting tests",
+    name = "Transform failure formatting tests",
 ) {
     testSuite(name = "Transform using `get`") {
         test(name = "Should pass when assertion on transformed property fails") {

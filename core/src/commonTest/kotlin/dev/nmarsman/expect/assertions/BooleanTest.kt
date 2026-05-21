@@ -5,7 +5,7 @@ import dev.nmarsman.expect.api.expectThat
 import dev.nmarsman.expect.api.expectThrows
 
 val BooleanTest by testSuite(
-    displayName = "Boolean assertion tests",
+    name = "Boolean assertion tests",
 ) {
     testSuite(name = "`isTrue` assertion") {
         test(name = "Passes when the subject is true") {

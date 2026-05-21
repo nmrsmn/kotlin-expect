@@ -6,7 +6,7 @@ import dev.nmarsman.expect.api.expectThrows
 import dev.nmarsman.expect.exception.AssertionFailedException
 
 val CollectionAssertionTest by testSuite(
-    displayName = "Collection assertion tests",
+    name = "Collection assertion tests",
 ) {
     testSuite(name = "`hasSize` assertions") {
         test(name = "Passes if the subject has the expected size") {

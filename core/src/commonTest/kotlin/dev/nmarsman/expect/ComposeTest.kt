@@ -7,7 +7,7 @@ import dev.nmarsman.expect.assertions.isEqualTo
 import dev.nmarsman.expect.exception.AssertionFailedException
 
 val ComposeTest by testSuite(
-    displayName = "Composed assertion tests",
+    name = "Composed assertion tests",
 ) {
     test(name = "require all should pass when all composed assertions pass") {
         expectThat(10)

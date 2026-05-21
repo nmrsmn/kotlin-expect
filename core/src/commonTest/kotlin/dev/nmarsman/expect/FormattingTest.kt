@@ -11,7 +11,7 @@ import dev.nmarsman.expect.exception.AssertionFailedException
 import dev.nmarsman.expect.helper.Person
 
 val FormattingTest by testSuite(
-    displayName = "Assertion failure message formatting tests",
+    name = "Assertion failure message formatting tests",
 ) {
     testSuite(name = "Chained assertions are formatted correctly") {
         test(name = "Without a descriptive passing message") {

@@ -7,7 +7,7 @@ import dev.nmarsman.expect.assertions.isEqualTo
 import dev.nmarsman.expect.assertions.isNull
 
 val AssertionResultTest by testSuite(
-    displayName = "Assertion result tests",
+    name = "Assertion result tests",
 ) {
     val subject = testFixture {
         AssertionSubject(

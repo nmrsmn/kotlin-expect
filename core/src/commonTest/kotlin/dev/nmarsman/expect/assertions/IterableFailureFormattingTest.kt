@@ -10,7 +10,7 @@ private fun Assertion.Builder<Int>.isOdd() =
     assertThat("is odd") { subject % 2 == 1 }
 
 val IterableFailureFormattingTest by testSuite(
-    displayName = "Iterable failure formatting tests",
+    name = "Iterable failure formatting tests",
 ) {
     testSuite(name = "`all` failure formatting") {
         test(name = "One element does not match the predicate") {

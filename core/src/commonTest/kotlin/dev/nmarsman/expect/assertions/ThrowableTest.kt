@@ -5,7 +5,7 @@ import dev.nmarsman.expect.api.expectThrows
 import dev.nmarsman.expect.exception.AssertionFailedException
 
 val ThrowableAssertionTest by testSuite(
-    displayName = "Throwable assertion tests",
+    name = "Throwable assertion tests",
 ) {
     testSuite(name = "`hasMessage` assertions") {
         test(name = "Passes if the subject has the expected message") {

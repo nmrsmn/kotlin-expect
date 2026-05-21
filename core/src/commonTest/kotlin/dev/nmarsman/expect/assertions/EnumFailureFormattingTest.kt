@@ -12,7 +12,7 @@ private enum class Color {
 }
 
 val EnumFailureFormattingTest by testSuite(
-    displayName = "Enum failure formatting tests",
+    name = "Enum failure formatting tests",
 ) {
     test(name = "Formats the failure message of `isOneOf` assertion correctly") {
         expectThrows<AssertionFailedException> {

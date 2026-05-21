@@ -5,7 +5,7 @@ import dev.nmarsman.expect.api.expectThat
 import dev.nmarsman.expect.assertions.isEqualTo
 import dev.nmarsman.expect.helper.Person
 
-val FunctionDescriptorTest by testSuite(displayName = "Function descriptor tests") {
+val FunctionDescriptorTest by testSuite(name = "Function descriptor tests") {
     testSuite(name = "Receiver function describe") {
         test("KProperty reference describes as 'value of the property'") {
             val function: Person.() -> String = Person::name

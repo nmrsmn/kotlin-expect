@@ -8,7 +8,7 @@ import dev.nmarsman.expect.helper.Person
 import kotlin.test.DefaultAsserter.fail
 
 val AnyAssertionTest by testSuite(
-    displayName = "Any assertion tests",
+    name = "Any assertion tests",
 ) {
     testSuite(name = "`isA` assertions") {
         test(name = "Passes if the subject is an instance of the expected type") {

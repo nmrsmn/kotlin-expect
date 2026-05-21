@@ -6,7 +6,7 @@ import dev.nmarsman.expect.api.expectThrows
 import dev.nmarsman.expect.exception.AssertionFailedException
 
 val CollectionFailureFormattingTest by testSuite(
-    displayName = "Collection failure formatting tests",
+    name = "Collection failure formatting tests",
 ) {
     test(name = "Formats the failure message of `hasSize` assertion correctly") {
         expectThrows<AssertionFailedException> {
