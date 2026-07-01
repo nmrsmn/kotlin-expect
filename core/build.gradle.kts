@@ -15,10 +15,6 @@ kotlin {
     iosArm64()
     iosSimulatorArm64()
 
-    compilerOptions {
-        freeCompilerArgs.add("-Xcontext-parameters")
-    }
-
     sourceSets {
         commonMain.dependencies {
             implementation(libs.opentest4k)
