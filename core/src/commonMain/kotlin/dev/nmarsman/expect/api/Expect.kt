@@ -25,7 +25,7 @@ fun <T> expectThat(subject: T): Assertion.Builder<T> =
  * about messages, root causes, etc.
  */
 @Suppress("UNCHECKED_CAST", "TooGenericExceptionCaught")
-inline fun <reified T : Throwable> expectThrows(crossinline block: () -> Unit): Assertion.Builder<T> =
+suspend inline fun <reified T : Throwable> expectThrows(crossinline block: suspend () -> Unit): Assertion.Builder<T> =
     expectThat(
         subject = try {
             block.invoke()
