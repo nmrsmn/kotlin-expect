@@ -43,6 +43,33 @@ suspend inline fun <reified T : Throwable> expectThrows(crossinline block: suspe
         } as Assertion.Builder<T>
 
 /**
+ * Asserts that [block] does not throw any exception when executed.
+ *
+ * @return an assertion over the result of [block], allowing further assertions about the result.
+ * This method is somewhat unnecessary, but it acts as a readable alternative for using `expectThat(block.invoke())`
+ * without a useful assertion.
+ */
+@Suppress("TooGenericExceptionCaught")
+suspend inline fun <reified T> expectDoesNotThrow(crossinline block: suspend () -> T): Assertion.Builder<T?> {
+    var throwable: Throwable? = null
+    return expectThat(
+        subject = try {
+            block.invoke()
+        } catch (caught: Throwable) {
+            throwable = caught
+            null
+        },
+    )
+        .describedAs(T::class)
+        .assert(description = "does not throw,") {
+            when (throwable) {
+                null -> pass()
+                else -> fail(description = "but threw {}", actual = throwable::class)
+            }
+        }
+}
+
+/**
  * Starts an assertion on the given [subject] and executes [block] using a collecting strategy
  * that accumulates all assertion failures and throws them together at the end.
  *
